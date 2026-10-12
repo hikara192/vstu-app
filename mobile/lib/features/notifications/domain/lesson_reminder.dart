@@ -65,7 +65,7 @@ class LessonReminderPlanner {
   static int _idFor(DateTime date, int number) {
     final days =
         dateOnly(date).millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
-    return days * 20 + number;
+    return days * 1000 + number;
   }
 
   static String _title(Lesson lesson) {

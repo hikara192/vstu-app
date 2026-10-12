@@ -108,7 +108,7 @@ class SettingsScreen extends ConsumerWidget {
                         icon: Icons.notifications_active_outlined,
                         title: 'Напоминать о парах',
                         subtitle:
-                            'За 10 минут до начала пары моей группы '
+                            'За 5 минут до начала пары моей группы '
                             '(по будням и субботам).',
                         value: settings.notificationsEnabled,
                         onChanged: (value) =>
@@ -213,7 +213,7 @@ class SettingsScreen extends ConsumerWidget {
       SnackBar(
         content: Text(
           value
-              ? 'Напоминания включены: за 10 минут до пары.'
+              ? 'Напоминания включены: за 5 минут до пары.'
               : 'Напоминания выключены.',
         ),
       ),

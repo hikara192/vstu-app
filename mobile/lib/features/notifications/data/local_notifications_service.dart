@@ -16,7 +16,7 @@ class LocalNotificationsService {
   static const AndroidNotificationDetails _details = AndroidNotificationDetails(
     _channelId,
     'Напоминания о парах',
-    channelDescription: 'Напоминания за 10 минут до начала пары.',
+    channelDescription: 'Напоминания за 5 минут до начала пары.',
     importance: Importance.high,
     priority: Priority.high,
     icon: _iconName,

@@ -22,9 +22,13 @@ class AppConfig {
   static const String accentKey = 'accent_color';
   static const String startScreenKey = 'start_screen';
   static const String notificationsEnabledKey = 'notifications_enabled';
+  static const String remindersPlanFingerprintKey = 'reminders_plan_fingerprint';
 
-  static const Duration clockTick = Duration(seconds: 1);
+  /// Частота «тиков» глобальных часов. Используется только для смены дня
+  /// и перехода состояния пары; плавный прогресс идёт через локальные
+  /// таймеры виджета TimeProgress — поэтому секундный тик не нужен.
+  static const Duration clockTick = Duration(seconds: 30);
 
-  static const Duration lessonReminderLead = Duration(minutes: 10);
+  static const Duration lessonReminderLead = Duration(minutes: 5);
   static const int lessonReminderHorizonDays = 14;
 }
