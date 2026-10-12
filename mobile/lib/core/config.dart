@@ -1,6 +1,9 @@
 class AppConfig {
   const AppConfig._();
 
+  /// Адрес системы дистанционного обучения (СДО) ВГТУ.
+  static const String sdoUrl = 'https://sdo.vstu.by';
+
   static const String apiBaseUrl = String.fromEnvironment(
     'UNI_API_BASE_URL',
     defaultValue: 'https://schedule.vstu.by/api/v1',

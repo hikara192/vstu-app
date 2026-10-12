@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-const String sdoUrl = 'https://sdo.vstu.by';
+import '../../features/sdo/sdo_screen.dart';
 
-Future<void> openSdo(BuildContext context) async {
-  final Uri uri = Uri.parse(sdoUrl);
-  final bool launched = await launchUrl(
-    uri,
-    mode: LaunchMode.externalApplication,
+/// Открывает СДО внутри приложения (полноэкранный WebView), а не во внешнем
+/// браузере. [webViewBody] — шов для тестов: подменяет настоящий WebView.
+void openSdo(BuildContext context, {WidgetBuilder? webViewBody}) {
+  Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (_) => SdoScreen(bodyBuilder: webViewBody),
+    ),
   );
-  if (!launched && context.mounted) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Не удалось открыть СДО')));
-  }
 }
 
 class SdoButton extends StatelessWidget {
-  const SdoButton({super.key});
+  const SdoButton({super.key, this.webViewBody});
+
+  final WidgetBuilder? webViewBody;
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       tooltip: 'СДО ВГТУ',
       icon: const Icon(Icons.school_outlined),
-      onPressed: () => openSdo(context),
+      onPressed: () => openSdo(context, webViewBody: webViewBody),
     );
   }
 }
