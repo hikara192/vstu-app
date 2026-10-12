@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../core/config.dart';
+import 'sdo_session_store.dart';
 
 /// Полноэкранный «мини-браузер» СДО ВГТУ: сайт открывается внутри приложения,
 /// а не во внешнем браузере.
@@ -23,6 +24,8 @@ class _SdoScreenState extends State<SdoScreen> {
   // В тестах (когда задан bodyBuilder) контроллер не создаётся вовсе —
   // WebViewController сразу требует зарегистрированную платформенную часть.
   WebViewController? _controller;
+  late final WebViewCookieManager _cookieManager;
+  late final SdoSessionStore _sessionStore;
   bool _failed = false;
   bool _canGoBack = false;
   bool _canGoForward = false;
@@ -31,20 +34,76 @@ class _SdoScreenState extends State<SdoScreen> {
   void initState() {
     super.initState();
     if (widget.bodyBuilder == null) {
+      _cookieManager = WebViewCookieManager();
+      _sessionStore = SdoSessionStore();
       _controller = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..setNavigationDelegate(
           NavigationDelegate(
             onPageStarted: (_) => _syncNavigationState(),
-            onPageFinished: (_) => _syncNavigationState(),
+            onPageFinished: (_) {
+              _syncNavigationState();
+              _snapshotSession();
+            },
             onWebResourceError: (error) {
               if (error.isForMainFrame == true) {
                 setState(() => _failed = true);
               }
             },
           ),
-        )
-        ..loadRequest(Uri.parse(AppConfig.sdoUrl));
+        );
+      _initializeSession();
+    }
+  }
+
+  /// Возвращает сохранённую сессию в WebView до первой загрузки страницы:
+  /// Moodle выдаёт куку `MoodleSession` без срока действия, и Android-WebView
+  /// теряет её при перезапуске приложения, хотя серверная сессия ещё жива.
+  Future<void> _initializeSession() async {
+    try {
+      final List<SdoSessionCookie> saved = await _sessionStore.load();
+      for (final SdoSessionCookie cookie in saved) {
+        await _cookieManager.setCookie(
+          WebViewCookie(
+            name: cookie.name,
+            value: cookie.value,
+            domain: AppConfig.sdoUrl,
+            path: '/',
+          ),
+        );
+      }
+    } on Object {
+      // Сессию восстановить не удалось — пользователь просто войдёт заново.
+    }
+    unawaited(_controller?.loadRequest(Uri.parse(AppConfig.sdoUrl)));
+  }
+
+  /// Снимает текущие куки с WebView и сохраняет их, чтобы авторизация
+  /// пережила перезапуск приложения. На странице входа сессия ещё гостевая —
+  /// такие куки не сохраняем, чтобы не затереть авторизованную сессию.
+  Future<void> _snapshotSession() async {
+    final WebViewController? controller = _controller;
+    if (controller == null) {
+      return;
+    }
+    try {
+      final String? url = await controller.currentUrl();
+      if (url != null && url.contains('/login/')) {
+        return;
+      }
+      final List<WebViewCookie> cookies = await _cookieManager.getCookies(
+        domain: Uri.parse(AppConfig.sdoUrl),
+      );
+      if (cookies.isEmpty) {
+        return;
+      }
+      await _sessionStore.save(
+        cookies
+            .map((WebViewCookie cookie) => SdoSessionCookie(name: cookie.name, value: cookie.value))
+            .toList(),
+      );
+    } on Object {
+      // Снимок не удался — хуже будет только перелогин при следующем запуске.
     }
   }
 
