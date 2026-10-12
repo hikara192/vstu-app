@@ -14,10 +14,16 @@ const SdoProfile _profile = SdoProfile(
 /// Источник данных-заглушка: записывает вызовы и отдаёт заданные ответы.
 class _FakeDataSource implements SdoDataSource {
   int? lastCoursesUserId;
-  int? lastGradesCourseId;
-  int? lastGradesUserId;
-  int? lastContentsCourseId;
-  Map<int, String>? lastDeadlineCourseNames;
+  int? lastAssignmentsCourseId;
+  int? lastAssignmentsUserId;
+  int? lastQuizzesCourseId;
+  int? lastQuizAttemptsQuizId;
+  int? lastQuizAttemptsUserId;
+  int? lastSubmissionAssignmentId;
+  int? lastDownloadFileCallCount;
+  int? lastSaveSubmissionAssignmentId;
+  int? lastSaveSubmissionUserId;
+  int? lastAutologinUserId;
 
   Object? loginError;
 
@@ -45,11 +51,17 @@ class _FakeDataSource implements SdoDataSource {
   }
 
   @override
+  Future<List<SdoCategory>> fetchCategories(String token) async {
+    return <SdoCategory>[
+      const SdoCategory(id: 1, name: 'ИТ', courseCount: 5),
+    ];
+  }
+
+  @override
   Future<List<SdoDeadline>> fetchDeadlines(
     String token, {
     required Map<int, String> courseNames,
   }) async {
-    lastDeadlineCourseNames = courseNames;
     return <SdoDeadline>[
       SdoDeadline(
         id: 1,
@@ -62,28 +74,10 @@ class _FakeDataSource implements SdoDataSource {
   }
 
   @override
-  Future<SdoCourseGrades> fetchCourseGrades(
-    String token, {
-    required int courseId,
-    required int userId,
-  }) async {
-    lastGradesCourseId = courseId;
-    lastGradesUserId = userId;
-    return SdoCourseGrades(
-      courseId: courseId,
-      courseGradeFormatted: '9,00',
-      items: const <SdoGradeItem>[
-        SdoGradeItem(id: 1, name: 'Тест 1', gradeFormatted: '8,50'),
-      ],
-    );
-  }
-
-  @override
   Future<List<SdoSection>> fetchCourseContents(
     String token, {
     required int courseId,
   }) async {
-    lastContentsCourseId = courseId;
     return <SdoSection>[
       const SdoSection(
         id: 1,
@@ -91,6 +85,103 @@ class _FakeDataSource implements SdoDataSource {
         modules: <SdoModule>[SdoModule(id: 10, name: 'Конспект')],
       ),
     ];
+  }
+
+  @override
+  Future<List<SdoAssignment>> fetchAssignments(
+    String token, {
+    required int courseId,
+    required int userId,
+  }) async {
+    lastAssignmentsCourseId = courseId;
+    lastAssignmentsUserId = userId;
+    return <SdoAssignment>[
+      SdoAssignment(
+        id: 100,
+        courseId: courseId,
+        name: 'Лаб 1',
+        description: 'Описание',
+        dueDate: DateTime(2026, 10, 20),
+        requiresText: true,
+        requiresFile: false,
+      ),
+    ];
+  }
+
+  @override
+  Future<SdoSubmission> fetchSubmission(
+    String token, {
+    required int assignmentId,
+  }) async {
+    lastSubmissionAssignmentId = assignmentId;
+    return const SdoSubmission(
+      status: SdoSubmissionStatus.submitted,
+      onlineText: 'Мой ответ',
+    );
+  }
+
+  @override
+  Future<List<SdoQuiz>> fetchQuizzes(
+    String token, {
+    required int courseId,
+  }) async {
+    lastQuizzesCourseId = courseId;
+    return <SdoQuiz>[
+      SdoQuiz(
+        id: 200,
+        courseId: courseId,
+        name: 'Тест 1',
+        courseModuleId: 5,
+        timeOpen: DateTime(2026, 10, 1),
+        timeClose: DateTime(2026, 11, 1),
+        timeLimit: 60,
+        maxAttempts: 2,
+      ),
+    ];
+  }
+
+  @override
+  Future<List<SdoQuizAttempt>> fetchQuizAttempts(
+    String token, {
+    required int quizId,
+    required int userId,
+  }) async {
+    lastQuizAttemptsQuizId = quizId;
+    lastQuizAttemptsUserId = userId;
+    return <SdoQuizAttempt>[
+      SdoQuizAttempt(
+        id: 1,
+        quizId: quizId,
+        attempt: 1,
+        state: 'finished',
+        grade: 8.5,
+      ),
+    ];
+  }
+
+  @override
+  Future<List<int>> downloadFile(String url, {required String token}) async {
+    lastDownloadFileCallCount = (lastDownloadFileCallCount ?? 0) + 1;
+    return <int>[1, 2, 3];
+  }
+
+  @override
+  Future<void> saveSubmission(
+    String token, {
+    required int assignmentId,
+    required int userId,
+    String? onlineText,
+    String? fileName,
+    List<int>? fileBytes,
+  }) async {
+    lastSaveSubmissionAssignmentId = assignmentId;
+    lastSaveSubmissionUserId = userId;
+  }
+
+  @override
+  Future<String?> autologinUrl(String token, {required int userId}) async {
+    lastAutologinUserId = userId;
+    return 'https://sdo.vstu.by/autologin?key=xxx&userid=$userId';
   }
 }
 
@@ -151,6 +242,17 @@ void main() {
     expect(courses.single.fullName, 'Физика');
   });
 
+  test('fetchCategories вызывает источник', () async {
+    final _FakeDataSource source = _FakeDataSource();
+    final SdoRepository repository = SdoRepository(
+      source,
+      InMemorySdoTokenStore('token-123', _profile),
+    );
+
+    final List<SdoCategory> categories = await repository.fetchCategories();
+    expect(categories.single.name, 'ИТ');
+  });
+
   test('fetchDeadlines подставляет названия курсов', () async {
     final _FakeDataSource source = _FakeDataSource();
     final SdoRepository repository = SdoRepository(
@@ -159,26 +261,109 @@ void main() {
     );
 
     final List<SdoDeadline> deadlines = await repository.fetchDeadlines();
-
-    expect(source.lastDeadlineCourseNames, <int, String>{17: 'Физика'});
     expect(deadlines.single.courseName, 'Физика');
   });
 
-  test('fetchCourseGrades и fetchCourseContents принимают courseId', () async {
+  test('fetchCourseContents принимает courseId', () async {
     final _FakeDataSource source = _FakeDataSource();
     final SdoRepository repository = SdoRepository(
       source,
       InMemorySdoTokenStore('token-123', _profile),
     );
 
-    final SdoCourseGrades grades = await repository.fetchCourseGrades(17);
     final List<SdoSection> sections = await repository.fetchCourseContents(17);
-
-    expect(source.lastGradesCourseId, 17);
-    expect(source.lastGradesUserId, 42);
-    expect(grades.courseGradeFormatted, '9,00');
-    expect(source.lastContentsCourseId, 17);
     expect(sections.single.modules.single.name, 'Конспект');
+  });
+
+  test('fetchAssignments передаёт courseId и userId', () async {
+    final _FakeDataSource source = _FakeDataSource();
+    final SdoRepository repository = SdoRepository(
+      source,
+      InMemorySdoTokenStore('token-123', _profile),
+    );
+
+    final List<SdoAssignment> assignments = await repository.fetchAssignments(17);
+    expect(source.lastAssignmentsCourseId, 17);
+    expect(source.lastAssignmentsUserId, 42);
+    expect(assignments.single.name, 'Лаб 1');
+  });
+
+  test('fetchSubmission передаёт assignmentId', () async {
+    final _FakeDataSource source = _FakeDataSource();
+    final SdoRepository repository = SdoRepository(
+      source,
+      InMemorySdoTokenStore('token-123', _profile),
+    );
+
+    final SdoSubmission submission = await repository.fetchSubmission(100);
+    expect(source.lastSubmissionAssignmentId, 100);
+    expect(submission.onlineText, 'Мой ответ');
+  });
+
+  test('fetchQuizzes передаёт courseId', () async {
+    final _FakeDataSource source = _FakeDataSource();
+    final SdoRepository repository = SdoRepository(
+      source,
+      InMemorySdoTokenStore('token-123', _profile),
+    );
+
+    final List<SdoQuiz> quizzes = await repository.fetchQuizzes(17);
+    expect(source.lastQuizzesCourseId, 17);
+    expect(quizzes.single.name, 'Тест 1');
+  });
+
+  test('fetchQuizAttempts передаёт quizId и userId', () async {
+    final _FakeDataSource source = _FakeDataSource();
+    final SdoRepository repository = SdoRepository(
+      source,
+      InMemorySdoTokenStore('token-123', _profile),
+    );
+
+    final List<SdoQuizAttempt> attempts = await repository.fetchQuizAttempts(200);
+    expect(source.lastQuizAttemptsQuizId, 200);
+    expect(source.lastQuizAttemptsUserId, 42);
+    expect(attempts.single.grade, 8.5);
+  });
+
+  test('downloadFile вызывает источник с токеном', () async {
+    final _FakeDataSource source = _FakeDataSource();
+    final SdoRepository repository = SdoRepository(
+      source,
+      InMemorySdoTokenStore('token-123', _profile),
+    );
+
+    final List<int> bytes = await repository.downloadFile('https://sdo.vstu.by/file.pdf');
+    expect(source.lastDownloadFileCallCount, 1);
+    expect(bytes, <int>[1, 2, 3]);
+  });
+
+  test('saveSubmission передаёт параметры', () async {
+    final _FakeDataSource source = _FakeDataSource();
+    final SdoRepository repository = SdoRepository(
+      source,
+      InMemorySdoTokenStore('token-123', _profile),
+    );
+
+    await repository.saveSubmission(
+      assignmentId: 100,
+      onlineText: 'Ответ',
+      fileName: 'file.pdf',
+      fileBytes: <int>[1, 2, 3],
+    );
+    expect(source.lastSaveSubmissionAssignmentId, 100);
+    expect(source.lastSaveSubmissionUserId, 42);
+  });
+
+  test('autologinUrl передаёт userId', () async {
+    final _FakeDataSource source = _FakeDataSource();
+    final SdoRepository repository = SdoRepository(
+      source,
+      InMemorySdoTokenStore('token-123', _profile),
+    );
+
+    final String? url = await repository.autologinUrl();
+    expect(source.lastAutologinUserId, 42);
+    expect(url, contains('userid=42'));
   });
 
   test('невалидный токен чистит хранилище', () async {

@@ -6,6 +6,7 @@ import '../../../core/widgets/gradient_header.dart';
 import '../data/sdo_exception.dart';
 import '../data/sdo_models.dart';
 import '../sdo_screen.dart';
+import 'sdo_categories_screen.dart';
 import 'sdo_course_screen.dart';
 import 'sdo_courses_tab.dart';
 import 'sdo_deadlines_tab.dart';
@@ -13,7 +14,8 @@ import 'sdo_login_form.dart';
 import 'sdo_providers.dart';
 
 /// Корневой экран СДО внутри приложения. Пока сессии нет — показывает
-/// нативную форму входа; после входа — курсы и дедлайны без веб-страниц.
+/// нативную форму входа; после входа — выбор специальности/категории,
+/// курсы и дедлайны без веб-страниц.
 class SdoHomeScreen extends ConsumerWidget {
   const SdoHomeScreen({super.key});
 
@@ -95,12 +97,8 @@ class _HomeView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final String subtitle = profile.fullName.isNotEmpty
-        ? profile.fullName
-        : profile.username;
-
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         body: Column(
           children: <Widget>[
@@ -111,7 +109,9 @@ class _HomeView extends ConsumerWidget {
                 onPressed: () => Navigator.of(context).maybePop(),
               ),
               title: 'СДО ВГТУ',
-              subtitle: subtitle,
+              subtitle: profile.fullName.isNotEmpty
+                  ? profile.fullName
+                  : profile.username,
               actions: <Widget>[
                 IconButton(
                   tooltip: 'Веб-версия СДО',
@@ -129,6 +129,7 @@ class _HomeView extends ConsumerWidget {
                 labelColor: Colors.white,
                 unselectedLabelColor: Colors.white70,
                 tabs: <Widget>[
+                  Tab(text: 'Специальности'),
                   Tab(text: 'Курсы'),
                   Tab(text: 'Дедлайны'),
                 ],
@@ -137,6 +138,7 @@ class _HomeView extends ConsumerWidget {
             Expanded(
               child: TabBarView(
                 children: <Widget>[
+                  const SdoCategoriesScreen(),
                   SdoCoursesTab(
                     onOpenCourse: (SdoCourse course) => Navigator.of(context)
                         .push(
@@ -164,9 +166,9 @@ class _HomeView extends ConsumerWidget {
 }
 
 void _openWeb(BuildContext context) {
-  Navigator.of(
-    context,
-  ).push(MaterialPageRoute<void>(builder: (_) => const SdoScreen()));
+  Navigator.of(context).push(
+    MaterialPageRoute<void>(builder: (_) => const SdoScreen()),
+  );
 }
 
 Future<void> _confirmLogout(BuildContext context, WidgetRef ref) async {

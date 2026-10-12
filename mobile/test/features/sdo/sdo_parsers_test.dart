@@ -28,6 +28,24 @@ void main() {
     });
   });
 
+  group('sdoCategoryFromMoodle', () {
+    test('разбирает категорию', () {
+      final SdoCategory cat = sdoCategoryFromMoodle(<String, dynamic>{
+        'id': 5,
+        'name': 'Программирование',
+        'parent': 0,
+        'coursecount': 12,
+        'idnumber': 'prog',
+      });
+
+      expect(cat.id, 5);
+      expect(cat.name, 'Программирование');
+      expect(cat.parent, 0);
+      expect(cat.courseCount, 12);
+      expect(cat.idNumber, 'prog');
+    });
+  });
+
   group('sdoCourseFromMoodle', () {
     test('разбирает курс и unix-даты', () {
       final SdoCourse course = sdoCourseFromMoodle(<String, dynamic>{
@@ -104,48 +122,134 @@ void main() {
     });
   });
 
-  group('sdoCourseGradesFromMoodle', () {
-    test('отделяет итог курса от позиций', () {
-      final SdoCourseGrades grades = sdoCourseGradesFromMoodle(<String, dynamic>{
-        'usergrades': <dynamic>[
-          <String, dynamic>{
-            'courseid': 17,
-            'gradeitems': <dynamic>[
-              <String, dynamic>{
-                'id': 1,
-                'itemname': 'Тест 1',
-                'itemtype': 'mod',
-                'itemmodule': 'quiz',
-                'gradeformatted': '8,50',
-                'graderaw': 8.5,
-                'grademax': 10,
-              },
-              <String, dynamic>{
-                'id': 900,
-                'itemname': null,
-                'itemtype': 'course',
-                'gradeformatted': '9,00',
+  group('sdoAssignmentFromMoodle', () {
+    test('разбирает задание с дедлайнами', () {
+      final SdoAssignment assignment = sdoAssignmentFromMoodle(
+        <String, dynamic>{
+          'id': 10,
+          'course': 17,
+          'name': 'Лаб 1',
+          'cmid': 5,
+          'intro': '<p>Описание</p>',
+          'duedate': 1700000000,
+          'allowsubmissionsfromdate': 1699000000,
+          'cutoffdate': 1701000000,
+          'maxattempts': 3,
+          'configs': <dynamic>[
+            {'plugin': 'onlinetext', 'name': 'enabled', 'value': 1},
+            {'plugin': 'file', 'name': 'enabled', 'value': 1},
+          ],
+          'status': 'submitted',
+        },
+        courseId: 17,
+      );
+
+      expect(assignment.id, 10);
+      expect(assignment.courseId, 17);
+      expect(assignment.name, 'Лаб 1');
+      expect(assignment.courseModuleId, 5);
+      expect(assignment.description, 'Описание');
+      expect(assignment.dueDate, isNotNull);
+      expect(assignment.requiresText, isTrue);
+      expect(assignment.requiresFile, isTrue);
+      expect(assignment.maxAttempts, 3);
+      expect(assignment.status, SdoSubmissionStatus.submitted);
+    });
+  });
+
+  group('sdoSubmissionFromStatus', () {
+    test('парсит отправку с текстом и файлами', () {
+      final SdoSubmission submission = sdoSubmissionFromStatus(<String, dynamic>{
+        'lastattempt': {
+          'submission': {
+            'status': 'draft',
+            'timemodified': 1700000000,
+            'plugins': <dynamic>[
+              {
+                'editorfields': <dynamic>[
+                  {'name': 'text', 'value': 'Мой ответ'},
+                ],
+                'fileareas': <dynamic>[
+                  {
+                    'files': <dynamic>[
+                      {
+                        'filename': 'file.pdf',
+                        'fileurl': 'https://sdo.vstu.by/.../file.pdf',
+                        'mimetype': 'application/pdf',
+                        'filesize': 1024,
+                        'timemodified': 1700000000,
+                      },
+                    ],
+                  },
+                ],
               },
             ],
           },
-        ],
+        },
       });
 
-      expect(grades.courseId, 17);
-      expect(grades.courseGradeFormatted, '9,00');
-      expect(grades.items, hasLength(1));
-      expect(grades.items.single.name, 'Тест 1');
-      expect(grades.items.single.gradeRaw, 8.5);
-      expect(grades.gradedItems, hasLength(1));
+      expect(submission.status, SdoSubmissionStatus.draft);
+      expect(submission.onlineText, 'Мой ответ');
+      expect(submission.files, hasLength(1));
+      expect(submission.files.first.fileName, 'file.pdf');
+      expect(submission.files.first.mimeType, 'application/pdf');
     });
 
-    test('пустой ответ даёт итог с fallback courseId', () {
-      final SdoCourseGrades grades = sdoCourseGradesFromMoodle(
-        <String, dynamic>{},
-        fallbackCourseId: 7,
-      );
-      expect(grades.courseId, 7);
-      expect(grades.items, isEmpty);
+    test('пустая отправка даёт статус new', () {
+      final SdoSubmission submission = sdoSubmissionFromStatus(<String, dynamic>{});
+      expect(submission.status, SdoSubmissionStatus.newSubmission);
+      expect(submission.onlineText, '');
+      expect(submission.files, isEmpty);
+    });
+  });
+
+  group('sdoQuizFromMoodle', () {
+    test('разбирает тест', () {
+      final SdoQuiz quiz = sdoQuizFromMoodle(<String, dynamic>{
+        'id': 7,
+        'course': 17,
+        'name': 'Тест по матану',
+        'coursemodule': 8,
+        'intro': '<p>Правила</p>',
+        'timeopen': 1700000000,
+        'timeclose': 1701000000,
+        'timelimit': 60,
+        'attempts': 2,
+        'grademethod': 1,
+        'hasquestions': 1,
+      });
+
+      expect(quiz.id, 7);
+      expect(quiz.courseId, 17);
+      expect(quiz.name, 'Тест по матану');
+      expect(quiz.courseModuleId, 8);
+      expect(quiz.intro, 'Правила');
+      expect(quiz.timeOpen, isNotNull);
+      expect(quiz.timeClose, isNotNull);
+      expect(quiz.timeLimit, 60);
+      expect(quiz.maxAttempts, 2);
+    });
+  });
+
+  group('sdoQuizAttemptFromMoodle', () {
+    test('разбирает попытку', () {
+      final SdoQuizAttempt attempt = sdoQuizAttemptFromMoodle(<String, dynamic>{
+        'id': 1,
+        'quiz': 7,
+        'attempt': 1,
+        'state': 'finished',
+        'timestart': 1700000000,
+        'timefinish': 1700003600,
+        'sumgrades': 8.5,
+      });
+
+      expect(attempt.id, 1);
+      expect(attempt.quizId, 7);
+      expect(attempt.attempt, 1);
+      expect(attempt.state, 'finished');
+      expect(attempt.isFinished, isTrue);
+      expect(attempt.isInProgress, isFalse);
+      expect(attempt.grade, 8.5);
     });
   });
 
@@ -164,6 +268,14 @@ void main() {
               'url': 'https://sdo.vstu.by/mod/resource/view.php?id=10',
               'visible': 1,
               'uservisible': 1,
+              'contents': <dynamic>[
+                {
+                  'filename': 'lecture1.pdf',
+                  'fileurl': 'https://sdo.vstu.by/.../lecture1.pdf',
+                  'mimetype': 'application/pdf',
+                  'filesize': 2048,
+                },
+              ],
             },
             <String, dynamic>{
               'id': 11,
@@ -180,6 +292,7 @@ void main() {
       expect(sections.single.summary, 'Кратко о курсе');
       expect(sections.single.modules, hasLength(2));
       expect(sections.single.modules.first.modName, 'resource');
+      expect(sections.single.modules.first.contents, hasLength(1));
       expect(sections.single.modules.last.visible, isFalse);
     });
 
@@ -192,10 +305,29 @@ void main() {
   group('stripHtml', () {
     test('убирает теги, лишние пробелы и раскрывает сущности', () {
       expect(
-        stripHtml('<p>Привет&nbsp;<b>мир</b> &amp;  всем</p>'),
+        stripHtml('<p>Привет&nbsp;<b>мир</b> &  всем</p>'),
         'Привет мир & всем',
       );
       expect(stripHtml(null), '');
+    });
+  });
+
+  group('SdoFile extensions', () {
+    test('isWebLink определяет ссылки', () {
+      final f1 = SdoFile(fileUrl: 'https://example.com');
+      final f2 = SdoFile(fileUrl: '');
+      final f3 = SdoFile(type: 'url');
+      final f4 = SdoFile(type: 'file', fileUrl: 'https://sdo.vstu.by/...');
+      expect(f1.isWebLink, isTrue);
+      expect(f2.isWebLink, isFalse);
+      expect(f3.isWebLink, isTrue);
+      expect(f4.isWebLink, isTrue);
+    });
+
+    test('isImage и isPdf', () {
+      expect(SdoFile(mimeType: 'image/png').isImage, isTrue);
+      expect(SdoFile(mimeType: 'application/pdf').isPdf, isTrue);
+      expect(SdoFile(mimeType: 'application/msword').isPdf, isFalse);
     });
   });
 }

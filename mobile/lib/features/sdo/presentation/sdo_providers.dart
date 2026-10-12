@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/sdo_api_client.dart';
 import '../data/sdo_data_source.dart';
+import '../data/sdo_file_opener.dart';
 import '../data/sdo_models.dart';
 import '../data/sdo_repository.dart';
 import '../data/sdo_token_store.dart';
@@ -25,6 +26,10 @@ final sdoRepositoryProvider = Provider<SdoRepository>(
     ref.watch(sdoDataSourceProvider),
     ref.watch(sdoTokenStoreProvider),
   ),
+);
+
+final sdoFileOpenerProvider = Provider<SdoFileOpener>(
+  (ref) => SystemSdoFileOpener(),
 );
 
 /// Состояние входа в СДО: `null` — гость, иначе профиль пользователя.
@@ -62,6 +67,7 @@ class SdoAuthController extends AsyncNotifier<SdoProfile?> {
 
   void _invalidateData() {
     ref.invalidate(sdoCoursesProvider);
+    ref.invalidate(sdoCategoriesProvider);
     ref.invalidate(sdoDeadlinesProvider);
   }
 }
@@ -74,15 +80,30 @@ final sdoCoursesProvider = FutureProvider<List<SdoCourse>>(
   (ref) => ref.watch(sdoRepositoryProvider).fetchCourses(),
 );
 
+final sdoCategoriesProvider = FutureProvider<List<SdoCategory>>(
+  (ref) => ref.watch(sdoRepositoryProvider).fetchCategories(),
+);
+
 final sdoDeadlinesProvider = FutureProvider<List<SdoDeadline>>(
   (ref) => ref.watch(sdoRepositoryProvider).fetchDeadlines(),
 );
 
 final sdoCourseContentsProvider = FutureProvider.family<List<SdoSection>, int>(
-  (ref, courseId) =>
-      ref.watch(sdoRepositoryProvider).fetchCourseContents(courseId),
+  (ref, courseId) => ref.watch(sdoRepositoryProvider).fetchCourseContents(courseId),
 );
 
-final sdoCourseGradesProvider = FutureProvider.family<SdoCourseGrades, int>(
-  (ref, courseId) => ref.watch(sdoRepositoryProvider).fetchCourseGrades(courseId),
+final sdoAssignmentsProvider = FutureProvider.family<List<SdoAssignment>, int>(
+  (ref, courseId) => ref.watch(sdoRepositoryProvider).fetchAssignments(courseId),
+);
+
+final sdoSubmissionProvider = FutureProvider.family<SdoSubmission, int>(
+  (ref, assignmentId) => ref.watch(sdoRepositoryProvider).fetchSubmission(assignmentId),
+);
+
+final sdoQuizzesProvider = FutureProvider.family<List<SdoQuiz>, int>(
+  (ref, courseId) => ref.watch(sdoRepositoryProvider).fetchQuizzes(courseId),
+);
+
+final sdoQuizAttemptsProvider = FutureProvider.family<List<SdoQuizAttempt>, int>(
+  (ref, quizId) => ref.watch(sdoRepositoryProvider).fetchQuizAttempts(quizId),
 );

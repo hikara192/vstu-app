@@ -102,8 +102,35 @@ class SdoApiClient {
     return json;
   }
 
+  /// Скачивает файл курса. Moodle отдаёт вложения через `pluginfile.php`,
+  /// доступ к которым открывается ws-токеном в параметре `token`.
+  Future<List<int>> downloadFile(String url, {required String token}) async {
+    final Response<List<int>> response = await _sendBytes(
+      () => _dio.get<List<int>>(
+        url,
+        queryParameters: <String, Object?>{'token': token},
+        options: Options(responseType: ResponseType.bytes),
+      ),
+    );
+    final List<int>? data = response.data;
+    if (data == null || data.isEmpty) {
+      throw const SdoException('СДО вернула пустой файл.');
+    }
+    return data;
+  }
+
   Future<Response<Object?>> _send(
     Future<Response<Object?>> Function() request,
+  ) async {
+    try {
+      return await request();
+    } on DioException catch (error) {
+      throw _mapDioError(error);
+    }
+  }
+
+  Future<Response<List<int>>> _sendBytes(
+    Future<Response<List<int>>> Function() request,
   ) async {
     try {
       return await request();

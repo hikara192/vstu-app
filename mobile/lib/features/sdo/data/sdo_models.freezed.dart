@@ -289,6 +289,282 @@ as String,
 }
 
 /// @nodoc
+mixin _$SdoCategory {
+
+ int get id; String get name; int? get parent; int get courseCount; String get idNumber;
+/// Create a copy of SdoCategory
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdoCategoryCopyWith<SdoCategory> get copyWith => _$SdoCategoryCopyWithImpl<SdoCategory>(this as SdoCategory, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  final _this = this as SdoCategory;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdoCategory&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.parent, _this.parent) || other.parent == _this.parent)&&(identical(other.courseCount, _this.courseCount) || other.courseCount == _this.courseCount)&&(identical(other.idNumber, _this.idNumber) || other.idNumber == _this.idNumber));
+}
+
+
+@override
+int get hashCode {
+  final _this = this as SdoCategory;
+  return Object.hash(runtimeType,_this.id,_this.name,_this.parent,_this.courseCount,_this.idNumber);
+}
+
+@override
+String toString() {
+  final _this = this as SdoCategory;
+  return 'SdoCategory(id: ${_this.id}, name: ${_this.name}, parent: ${_this.parent}, courseCount: ${_this.courseCount}, idNumber: ${_this.idNumber})';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdoCategoryCopyWith<$Res>  {
+  factory $SdoCategoryCopyWith(SdoCategory value, $Res Function(SdoCategory) _then) = _$SdoCategoryCopyWithImpl;
+@useResult
+$Res call({
+ int id, String name, int? parent, int courseCount, String idNumber
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdoCategoryCopyWithImpl<$Res>
+    implements $SdoCategoryCopyWith<$Res> {
+  _$SdoCategoryCopyWithImpl(this._self, this._then);
+
+  final SdoCategory _self;
+  final $Res Function(SdoCategory) _then;
+
+/// Create a copy of SdoCategory
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? parent = freezed,Object? courseCount = null,Object? idNumber = null,}) {
+  return _then(SdoCategory(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,parent: freezed == parent ? _self.parent : parent // ignore: cast_nullable_to_non_nullable
+as int?,courseCount: null == courseCount ? _self.courseCount : courseCount // ignore: cast_nullable_to_non_nullable
+as int,idNumber: null == idNumber ? _self.idNumber : idNumber // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [SdoCategory].
+extension SdoCategoryPatterns on SdoCategory {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SdoCategory value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _SdoCategory() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SdoCategory value)  $default,){
+final _that = this;
+switch (_that) {
+case _SdoCategory():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SdoCategory value)?  $default,){
+final _that = this;
+switch (_that) {
+case _SdoCategory() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  int? parent,  int courseCount,  String idNumber)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _SdoCategory() when $default != null:
+return $default(_that.id,_that.name,_that.parent,_that.courseCount,_that.idNumber);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  int? parent,  int courseCount,  String idNumber)  $default,) {final _that = this;
+switch (_that) {
+case _SdoCategory():
+return $default(_that.id,_that.name,_that.parent,_that.courseCount,_that.idNumber);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  int? parent,  int courseCount,  String idNumber)?  $default,) {final _that = this;
+switch (_that) {
+case _SdoCategory() when $default != null:
+return $default(_that.id,_that.name,_that.parent,_that.courseCount,_that.idNumber);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _SdoCategory implements SdoCategory {
+  const _SdoCategory({required this.id, this.name = '', this.parent, this.courseCount = 0, this.idNumber = ''});
+  
+
+@override final  int id;
+@override@JsonKey() final  String name;
+@override final  int? parent;
+@override@JsonKey() final  int courseCount;
+@override@JsonKey() final  String idNumber;
+
+/// Create a copy of SdoCategory
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SdoCategoryCopyWith<_SdoCategory> get copyWith => __$SdoCategoryCopyWithImpl<_SdoCategory>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SdoCategory&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.parent, parent) || other.parent == parent)&&(identical(other.courseCount, courseCount) || other.courseCount == courseCount)&&(identical(other.idNumber, idNumber) || other.idNumber == idNumber));
+}
+
+
+@override
+int get hashCode {
+    return Object.hash(runtimeType,id,name,parent,courseCount,idNumber);
+}
+
+@override
+String toString() {
+    return 'SdoCategory(id: $id, name: $name, parent: $parent, courseCount: $courseCount, idNumber: $idNumber)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SdoCategoryCopyWith<$Res> implements $SdoCategoryCopyWith<$Res> {
+  factory _$SdoCategoryCopyWith(_SdoCategory value, $Res Function(_SdoCategory) _then) = __$SdoCategoryCopyWithImpl;
+@override @useResult
+$Res call({
+ int id, String name, int? parent, int courseCount, String idNumber
+});
+
+
+
+
+}
+/// @nodoc
+class __$SdoCategoryCopyWithImpl<$Res>
+    implements _$SdoCategoryCopyWith<$Res> {
+  __$SdoCategoryCopyWithImpl(this._self, this._then);
+
+  final _SdoCategory _self;
+  final $Res Function(_SdoCategory) _then;
+
+/// Create a copy of SdoCategory
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? parent = freezed,Object? courseCount = null,Object? idNumber = null,}) {
+  return _then(_SdoCategory(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,parent: freezed == parent ? _self.parent : parent // ignore: cast_nullable_to_non_nullable
+as int?,courseCount: null == courseCount ? _self.courseCount : courseCount // ignore: cast_nullable_to_non_nullable
+as int,idNumber: null == idNumber ? _self.idNumber : idNumber // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
 mixin _$SdoCourse {
 
  int get id; String get shortName; String get fullName; String get displayName; int? get categoryId; bool get visible; DateTime? get startDate; DateTime? get endDate;
@@ -865,45 +1141,45 @@ as bool,
 }
 
 /// @nodoc
-mixin _$SdoGradeItem {
+mixin _$SdoFile {
 
- int get id; String get name; String get moduleName; String get itemType; String get gradeFormatted; double? get gradeRaw; double? get minGrade; double? get maxGrade; int? get courseModuleId;
-/// Create a copy of SdoGradeItem
+ String get type; String get fileName; String get fileUrl; String get mimeType; int get fileSize; DateTime? get timeModified; List<int> get fileBytes;
+/// Create a copy of SdoFile
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$SdoGradeItemCopyWith<SdoGradeItem> get copyWith => _$SdoGradeItemCopyWithImpl<SdoGradeItem>(this as SdoGradeItem, _$identity);
+$SdoFileCopyWith<SdoFile> get copyWith => _$SdoFileCopyWithImpl<SdoFile>(this as SdoFile, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  final _this = this as SdoGradeItem;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdoGradeItem&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.moduleName, _this.moduleName) || other.moduleName == _this.moduleName)&&(identical(other.itemType, _this.itemType) || other.itemType == _this.itemType)&&(identical(other.gradeFormatted, _this.gradeFormatted) || other.gradeFormatted == _this.gradeFormatted)&&(identical(other.gradeRaw, _this.gradeRaw) || other.gradeRaw == _this.gradeRaw)&&(identical(other.minGrade, _this.minGrade) || other.minGrade == _this.minGrade)&&(identical(other.maxGrade, _this.maxGrade) || other.maxGrade == _this.maxGrade)&&(identical(other.courseModuleId, _this.courseModuleId) || other.courseModuleId == _this.courseModuleId));
+  final _this = this as SdoFile;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdoFile&&(identical(other.type, _this.type) || other.type == _this.type)&&(identical(other.fileName, _this.fileName) || other.fileName == _this.fileName)&&(identical(other.fileUrl, _this.fileUrl) || other.fileUrl == _this.fileUrl)&&(identical(other.mimeType, _this.mimeType) || other.mimeType == _this.mimeType)&&(identical(other.fileSize, _this.fileSize) || other.fileSize == _this.fileSize)&&(identical(other.timeModified, _this.timeModified) || other.timeModified == _this.timeModified)&&const DeepCollectionEquality().equals(other.fileBytes, _this.fileBytes));
 }
 
 
 @override
 int get hashCode {
-  final _this = this as SdoGradeItem;
-  return Object.hash(runtimeType,_this.id,_this.name,_this.moduleName,_this.itemType,_this.gradeFormatted,_this.gradeRaw,_this.minGrade,_this.maxGrade,_this.courseModuleId);
+  final _this = this as SdoFile;
+  return Object.hash(runtimeType,_this.type,_this.fileName,_this.fileUrl,_this.mimeType,_this.fileSize,_this.timeModified,const DeepCollectionEquality().hash(_this.fileBytes));
 }
 
 @override
 String toString() {
-  final _this = this as SdoGradeItem;
-  return 'SdoGradeItem(id: ${_this.id}, name: ${_this.name}, moduleName: ${_this.moduleName}, itemType: ${_this.itemType}, gradeFormatted: ${_this.gradeFormatted}, gradeRaw: ${_this.gradeRaw}, minGrade: ${_this.minGrade}, maxGrade: ${_this.maxGrade}, courseModuleId: ${_this.courseModuleId})';
+  final _this = this as SdoFile;
+  return 'SdoFile(type: ${_this.type}, fileName: ${_this.fileName}, fileUrl: ${_this.fileUrl}, mimeType: ${_this.mimeType}, fileSize: ${_this.fileSize}, timeModified: ${_this.timeModified}, fileBytes: ${_this.fileBytes})';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $SdoGradeItemCopyWith<$Res>  {
-  factory $SdoGradeItemCopyWith(SdoGradeItem value, $Res Function(SdoGradeItem) _then) = _$SdoGradeItemCopyWithImpl;
+abstract mixin class $SdoFileCopyWith<$Res>  {
+  factory $SdoFileCopyWith(SdoFile value, $Res Function(SdoFile) _then) = _$SdoFileCopyWithImpl;
 @useResult
 $Res call({
- int id, String name, String moduleName, String itemType, String gradeFormatted, double? gradeRaw, double? minGrade, double? maxGrade, int? courseModuleId
+ String type, String fileName, String fileUrl, String mimeType, int fileSize, DateTime? timeModified, List<int> fileBytes
 });
 
 
@@ -911,35 +1187,33 @@ $Res call({
 
 }
 /// @nodoc
-class _$SdoGradeItemCopyWithImpl<$Res>
-    implements $SdoGradeItemCopyWith<$Res> {
-  _$SdoGradeItemCopyWithImpl(this._self, this._then);
+class _$SdoFileCopyWithImpl<$Res>
+    implements $SdoFileCopyWith<$Res> {
+  _$SdoFileCopyWithImpl(this._self, this._then);
 
-  final SdoGradeItem _self;
-  final $Res Function(SdoGradeItem) _then;
+  final SdoFile _self;
+  final $Res Function(SdoFile) _then;
 
-/// Create a copy of SdoGradeItem
+/// Create a copy of SdoFile
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? moduleName = null,Object? itemType = null,Object? gradeFormatted = null,Object? gradeRaw = freezed,Object? minGrade = freezed,Object? maxGrade = freezed,Object? courseModuleId = freezed,}) {
-  return _then(SdoGradeItem(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,moduleName: null == moduleName ? _self.moduleName : moduleName // ignore: cast_nullable_to_non_nullable
-as String,itemType: null == itemType ? _self.itemType : itemType // ignore: cast_nullable_to_non_nullable
-as String,gradeFormatted: null == gradeFormatted ? _self.gradeFormatted : gradeFormatted // ignore: cast_nullable_to_non_nullable
-as String,gradeRaw: freezed == gradeRaw ? _self.gradeRaw : gradeRaw // ignore: cast_nullable_to_non_nullable
-as double?,minGrade: freezed == minGrade ? _self.minGrade : minGrade // ignore: cast_nullable_to_non_nullable
-as double?,maxGrade: freezed == maxGrade ? _self.maxGrade : maxGrade // ignore: cast_nullable_to_non_nullable
-as double?,courseModuleId: freezed == courseModuleId ? _self.courseModuleId : courseModuleId // ignore: cast_nullable_to_non_nullable
-as int?,
+@pragma('vm:prefer-inline') @override $Res call({Object? type = null,Object? fileName = null,Object? fileUrl = null,Object? mimeType = null,Object? fileSize = null,Object? timeModified = freezed,Object? fileBytes = null,}) {
+  return _then(SdoFile(
+type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,fileName: null == fileName ? _self.fileName : fileName // ignore: cast_nullable_to_non_nullable
+as String,fileUrl: null == fileUrl ? _self.fileUrl : fileUrl // ignore: cast_nullable_to_non_nullable
+as String,mimeType: null == mimeType ? _self.mimeType : mimeType // ignore: cast_nullable_to_non_nullable
+as String,fileSize: null == fileSize ? _self.fileSize : fileSize // ignore: cast_nullable_to_non_nullable
+as int,timeModified: freezed == timeModified ? _self.timeModified : timeModified // ignore: cast_nullable_to_non_nullable
+as DateTime?,fileBytes: null == fileBytes ? _self.fileBytes : fileBytes // ignore: cast_nullable_to_non_nullable
+as List<int>,
   ));
 }
 
 }
 
 
-/// Adds pattern-matching-related methods to [SdoGradeItem].
-extension SdoGradeItemPatterns on SdoGradeItem {
+/// Adds pattern-matching-related methods to [SdoFile].
+extension SdoFilePatterns on SdoFile {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -952,10 +1226,10 @@ extension SdoGradeItemPatterns on SdoGradeItem {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SdoGradeItem value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SdoFile value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _SdoGradeItem() when $default != null:
+case _SdoFile() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -974,10 +1248,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SdoGradeItem value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SdoFile value)  $default,){
 final _that = this;
 switch (_that) {
-case _SdoGradeItem():
+case _SdoFile():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -995,10 +1269,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SdoGradeItem value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SdoFile value)?  $default,){
 final _that = this;
 switch (_that) {
-case _SdoGradeItem() when $default != null:
+case _SdoFile() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -1016,10 +1290,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String moduleName,  String itemType,  String gradeFormatted,  double? gradeRaw,  double? minGrade,  double? maxGrade,  int? courseModuleId)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String type,  String fileName,  String fileUrl,  String mimeType,  int fileSize,  DateTime? timeModified,  List<int> fileBytes)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _SdoGradeItem() when $default != null:
-return $default(_that.id,_that.name,_that.moduleName,_that.itemType,_that.gradeFormatted,_that.gradeRaw,_that.minGrade,_that.maxGrade,_that.courseModuleId);case _:
+case _SdoFile() when $default != null:
+return $default(_that.type,_that.fileName,_that.fileUrl,_that.mimeType,_that.fileSize,_that.timeModified,_that.fileBytes);case _:
   return orElse();
 
 }
@@ -1037,10 +1311,10 @@ return $default(_that.id,_that.name,_that.moduleName,_that.itemType,_that.gradeF
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String moduleName,  String itemType,  String gradeFormatted,  double? gradeRaw,  double? minGrade,  double? maxGrade,  int? courseModuleId)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String type,  String fileName,  String fileUrl,  String mimeType,  int fileSize,  DateTime? timeModified,  List<int> fileBytes)  $default,) {final _that = this;
 switch (_that) {
-case _SdoGradeItem():
-return $default(_that.id,_that.name,_that.moduleName,_that.itemType,_that.gradeFormatted,_that.gradeRaw,_that.minGrade,_that.maxGrade,_that.courseModuleId);case _:
+case _SdoFile():
+return $default(_that.type,_that.fileName,_that.fileUrl,_that.mimeType,_that.fileSize,_that.timeModified,_that.fileBytes);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1057,10 +1331,10 @@ return $default(_that.id,_that.name,_that.moduleName,_that.itemType,_that.gradeF
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String moduleName,  String itemType,  String gradeFormatted,  double? gradeRaw,  double? minGrade,  double? maxGrade,  int? courseModuleId)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String type,  String fileName,  String fileUrl,  String mimeType,  int fileSize,  DateTime? timeModified,  List<int> fileBytes)?  $default,) {final _that = this;
 switch (_that) {
-case _SdoGradeItem() when $default != null:
-return $default(_that.id,_that.name,_that.moduleName,_that.itemType,_that.gradeFormatted,_that.gradeRaw,_that.minGrade,_that.maxGrade,_that.courseModuleId);case _:
+case _SdoFile() when $default != null:
+return $default(_that.type,_that.fileName,_that.fileUrl,_that.mimeType,_that.fileSize,_that.timeModified,_that.fileBytes);case _:
   return null;
 
 }
@@ -1071,337 +1345,57 @@ return $default(_that.id,_that.name,_that.moduleName,_that.itemType,_that.gradeF
 /// @nodoc
 
 
-class _SdoGradeItem implements SdoGradeItem {
-  const _SdoGradeItem({required this.id, this.name = '', this.moduleName = '', this.itemType = '', this.gradeFormatted = '', this.gradeRaw, this.minGrade, this.maxGrade, this.courseModuleId});
+class _SdoFile implements SdoFile {
+  const _SdoFile({this.type = 'file', this.fileName = '', this.fileUrl = '', this.mimeType = '', this.fileSize = 0, this.timeModified,  List<int> fileBytes = const <int>[]}): _fileBytes = fileBytes;
   
 
-@override final  int id;
-@override@JsonKey() final  String name;
-@override@JsonKey() final  String moduleName;
-@override@JsonKey() final  String itemType;
-@override@JsonKey() final  String gradeFormatted;
-@override final  double? gradeRaw;
-@override final  double? minGrade;
-@override final  double? maxGrade;
-@override final  int? courseModuleId;
-
-/// Create a copy of SdoGradeItem
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$SdoGradeItemCopyWith<_SdoGradeItem> get copyWith => __$SdoGradeItemCopyWithImpl<_SdoGradeItem>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SdoGradeItem&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.moduleName, moduleName) || other.moduleName == moduleName)&&(identical(other.itemType, itemType) || other.itemType == itemType)&&(identical(other.gradeFormatted, gradeFormatted) || other.gradeFormatted == gradeFormatted)&&(identical(other.gradeRaw, gradeRaw) || other.gradeRaw == gradeRaw)&&(identical(other.minGrade, minGrade) || other.minGrade == minGrade)&&(identical(other.maxGrade, maxGrade) || other.maxGrade == maxGrade)&&(identical(other.courseModuleId, courseModuleId) || other.courseModuleId == courseModuleId));
-}
-
-
-@override
-int get hashCode {
-    return Object.hash(runtimeType,id,name,moduleName,itemType,gradeFormatted,gradeRaw,minGrade,maxGrade,courseModuleId);
-}
-
-@override
-String toString() {
-    return 'SdoGradeItem(id: $id, name: $name, moduleName: $moduleName, itemType: $itemType, gradeFormatted: $gradeFormatted, gradeRaw: $gradeRaw, minGrade: $minGrade, maxGrade: $maxGrade, courseModuleId: $courseModuleId)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$SdoGradeItemCopyWith<$Res> implements $SdoGradeItemCopyWith<$Res> {
-  factory _$SdoGradeItemCopyWith(_SdoGradeItem value, $Res Function(_SdoGradeItem) _then) = __$SdoGradeItemCopyWithImpl;
-@override @useResult
-$Res call({
- int id, String name, String moduleName, String itemType, String gradeFormatted, double? gradeRaw, double? minGrade, double? maxGrade, int? courseModuleId
-});
-
-
-
-
-}
-/// @nodoc
-class __$SdoGradeItemCopyWithImpl<$Res>
-    implements _$SdoGradeItemCopyWith<$Res> {
-  __$SdoGradeItemCopyWithImpl(this._self, this._then);
-
-  final _SdoGradeItem _self;
-  final $Res Function(_SdoGradeItem) _then;
-
-/// Create a copy of SdoGradeItem
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? moduleName = null,Object? itemType = null,Object? gradeFormatted = null,Object? gradeRaw = freezed,Object? minGrade = freezed,Object? maxGrade = freezed,Object? courseModuleId = freezed,}) {
-  return _then(_SdoGradeItem(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,moduleName: null == moduleName ? _self.moduleName : moduleName // ignore: cast_nullable_to_non_nullable
-as String,itemType: null == itemType ? _self.itemType : itemType // ignore: cast_nullable_to_non_nullable
-as String,gradeFormatted: null == gradeFormatted ? _self.gradeFormatted : gradeFormatted // ignore: cast_nullable_to_non_nullable
-as String,gradeRaw: freezed == gradeRaw ? _self.gradeRaw : gradeRaw // ignore: cast_nullable_to_non_nullable
-as double?,minGrade: freezed == minGrade ? _self.minGrade : minGrade // ignore: cast_nullable_to_non_nullable
-as double?,maxGrade: freezed == maxGrade ? _self.maxGrade : maxGrade // ignore: cast_nullable_to_non_nullable
-as double?,courseModuleId: freezed == courseModuleId ? _self.courseModuleId : courseModuleId // ignore: cast_nullable_to_non_nullable
-as int?,
-  ));
-}
-
-
-}
-
-/// @nodoc
-mixin _$SdoCourseGrades {
-
- int get courseId; String get courseName; String get courseGradeFormatted; List<SdoGradeItem> get items;
-/// Create a copy of SdoCourseGrades
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$SdoCourseGradesCopyWith<SdoCourseGrades> get copyWith => _$SdoCourseGradesCopyWithImpl<SdoCourseGrades>(this as SdoCourseGrades, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  final _this = this as SdoCourseGrades;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdoCourseGrades&&(identical(other.courseId, _this.courseId) || other.courseId == _this.courseId)&&(identical(other.courseName, _this.courseName) || other.courseName == _this.courseName)&&(identical(other.courseGradeFormatted, _this.courseGradeFormatted) || other.courseGradeFormatted == _this.courseGradeFormatted)&&const DeepCollectionEquality().equals(other.items, _this.items));
-}
-
-
-@override
-int get hashCode {
-  final _this = this as SdoCourseGrades;
-  return Object.hash(runtimeType,_this.courseId,_this.courseName,_this.courseGradeFormatted,const DeepCollectionEquality().hash(_this.items));
-}
-
-@override
-String toString() {
-  final _this = this as SdoCourseGrades;
-  return 'SdoCourseGrades(courseId: ${_this.courseId}, courseName: ${_this.courseName}, courseGradeFormatted: ${_this.courseGradeFormatted}, items: ${_this.items})';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $SdoCourseGradesCopyWith<$Res>  {
-  factory $SdoCourseGradesCopyWith(SdoCourseGrades value, $Res Function(SdoCourseGrades) _then) = _$SdoCourseGradesCopyWithImpl;
-@useResult
-$Res call({
- int courseId, String courseName, String courseGradeFormatted, List<SdoGradeItem> items
-});
-
-
-
-
-}
-/// @nodoc
-class _$SdoCourseGradesCopyWithImpl<$Res>
-    implements $SdoCourseGradesCopyWith<$Res> {
-  _$SdoCourseGradesCopyWithImpl(this._self, this._then);
-
-  final SdoCourseGrades _self;
-  final $Res Function(SdoCourseGrades) _then;
-
-/// Create a copy of SdoCourseGrades
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? courseId = null,Object? courseName = null,Object? courseGradeFormatted = null,Object? items = null,}) {
-  return _then(SdoCourseGrades(
-courseId: null == courseId ? _self.courseId : courseId // ignore: cast_nullable_to_non_nullable
-as int,courseName: null == courseName ? _self.courseName : courseName // ignore: cast_nullable_to_non_nullable
-as String,courseGradeFormatted: null == courseGradeFormatted ? _self.courseGradeFormatted : courseGradeFormatted // ignore: cast_nullable_to_non_nullable
-as String,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
-as List<SdoGradeItem>,
-  ));
-}
-
-}
-
-
-/// Adds pattern-matching-related methods to [SdoCourseGrades].
-extension SdoCourseGradesPatterns on SdoCourseGrades {
-/// A variant of `map` that fallback to returning `orElse`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SdoCourseGrades value)?  $default,{required TResult orElse(),}){
-final _that = this;
-switch (_that) {
-case _SdoCourseGrades() when $default != null:
-return $default(_that);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SdoCourseGrades value)  $default,){
-final _that = this;
-switch (_that) {
-case _SdoCourseGrades():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SdoCourseGrades value)?  $default,){
-final _that = this;
-switch (_that) {
-case _SdoCourseGrades() when $default != null:
-return $default(_that);case _:
-  return null;
-
-}
-}
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
-
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int courseId,  String courseName,  String courseGradeFormatted,  List<SdoGradeItem> items)?  $default,{required TResult orElse(),}) {final _that = this;
-switch (_that) {
-case _SdoCourseGrades() when $default != null:
-return $default(_that.courseId,_that.courseName,_that.courseGradeFormatted,_that.items);case _:
-  return orElse();
-
-}
-}
-/// A `switch`-like method, using callbacks.
-///
-/// As opposed to `map`, this offers destructuring.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case Subclass2(:final field2):
-///     return ...;
-/// }
-/// ```
-
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int courseId,  String courseName,  String courseGradeFormatted,  List<SdoGradeItem> items)  $default,) {final _that = this;
-switch (_that) {
-case _SdoCourseGrades():
-return $default(_that.courseId,_that.courseName,_that.courseGradeFormatted,_that.items);case _:
-  throw StateError('Unexpected subclass');
-
-}
-}
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
-
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int courseId,  String courseName,  String courseGradeFormatted,  List<SdoGradeItem> items)?  $default,) {final _that = this;
-switch (_that) {
-case _SdoCourseGrades() when $default != null:
-return $default(_that.courseId,_that.courseName,_that.courseGradeFormatted,_that.items);case _:
-  return null;
-
-}
-}
-
-}
-
-/// @nodoc
-
-
-class _SdoCourseGrades implements SdoCourseGrades {
-  const _SdoCourseGrades({required this.courseId, this.courseName = '', this.courseGradeFormatted = '',  List<SdoGradeItem> items = const <SdoGradeItem>[]}): _items = items;
-  
-
-@override final  int courseId;
-@override@JsonKey() final  String courseName;
-@override@JsonKey() final  String courseGradeFormatted;
- final  List<SdoGradeItem> _items;
-@override@JsonKey() List<SdoGradeItem> get items {
-  if (_items is EqualUnmodifiableListView) return _items;
+@override@JsonKey() final  String type;
+@override@JsonKey() final  String fileName;
+@override@JsonKey() final  String fileUrl;
+@override@JsonKey() final  String mimeType;
+@override@JsonKey() final  int fileSize;
+@override final  DateTime? timeModified;
+ final  List<int> _fileBytes;
+@override@JsonKey() List<int> get fileBytes {
+  if (_fileBytes is EqualUnmodifiableListView) return _fileBytes;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_items);
+  return EqualUnmodifiableListView(_fileBytes);
 }
 
 
-/// Create a copy of SdoCourseGrades
+/// Create a copy of SdoFile
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$SdoCourseGradesCopyWith<_SdoCourseGrades> get copyWith => __$SdoCourseGradesCopyWithImpl<_SdoCourseGrades>(this, _$identity);
+_$SdoFileCopyWith<_SdoFile> get copyWith => __$SdoFileCopyWithImpl<_SdoFile>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SdoCourseGrades&&(identical(other.courseId, courseId) || other.courseId == courseId)&&(identical(other.courseName, courseName) || other.courseName == courseName)&&(identical(other.courseGradeFormatted, courseGradeFormatted) || other.courseGradeFormatted == courseGradeFormatted)&&const DeepCollectionEquality().equals(other.items, _items));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SdoFile&&(identical(other.type, type) || other.type == type)&&(identical(other.fileName, fileName) || other.fileName == fileName)&&(identical(other.fileUrl, fileUrl) || other.fileUrl == fileUrl)&&(identical(other.mimeType, mimeType) || other.mimeType == mimeType)&&(identical(other.fileSize, fileSize) || other.fileSize == fileSize)&&(identical(other.timeModified, timeModified) || other.timeModified == timeModified)&&const DeepCollectionEquality().equals(other.fileBytes, _fileBytes));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,courseId,courseName,courseGradeFormatted,const DeepCollectionEquality().hash(_items));
+    return Object.hash(runtimeType,type,fileName,fileUrl,mimeType,fileSize,timeModified,const DeepCollectionEquality().hash(_fileBytes));
 }
 
 @override
 String toString() {
-    return 'SdoCourseGrades(courseId: $courseId, courseName: $courseName, courseGradeFormatted: $courseGradeFormatted, items: $items)';
+    return 'SdoFile(type: $type, fileName: $fileName, fileUrl: $fileUrl, mimeType: $mimeType, fileSize: $fileSize, timeModified: $timeModified, fileBytes: $fileBytes)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$SdoCourseGradesCopyWith<$Res> implements $SdoCourseGradesCopyWith<$Res> {
-  factory _$SdoCourseGradesCopyWith(_SdoCourseGrades value, $Res Function(_SdoCourseGrades) _then) = __$SdoCourseGradesCopyWithImpl;
+abstract mixin class _$SdoFileCopyWith<$Res> implements $SdoFileCopyWith<$Res> {
+  factory _$SdoFileCopyWith(_SdoFile value, $Res Function(_SdoFile) _then) = __$SdoFileCopyWithImpl;
 @override @useResult
 $Res call({
- int courseId, String courseName, String courseGradeFormatted, List<SdoGradeItem> items
+ String type, String fileName, String fileUrl, String mimeType, int fileSize, DateTime? timeModified, List<int> fileBytes
 });
 
 
@@ -1409,22 +1403,25 @@ $Res call({
 
 }
 /// @nodoc
-class __$SdoCourseGradesCopyWithImpl<$Res>
-    implements _$SdoCourseGradesCopyWith<$Res> {
-  __$SdoCourseGradesCopyWithImpl(this._self, this._then);
+class __$SdoFileCopyWithImpl<$Res>
+    implements _$SdoFileCopyWith<$Res> {
+  __$SdoFileCopyWithImpl(this._self, this._then);
 
-  final _SdoCourseGrades _self;
-  final $Res Function(_SdoCourseGrades) _then;
+  final _SdoFile _self;
+  final $Res Function(_SdoFile) _then;
 
-/// Create a copy of SdoCourseGrades
+/// Create a copy of SdoFile
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? courseId = null,Object? courseName = null,Object? courseGradeFormatted = null,Object? items = null,}) {
-  return _then(_SdoCourseGrades(
-courseId: null == courseId ? _self.courseId : courseId // ignore: cast_nullable_to_non_nullable
-as int,courseName: null == courseName ? _self.courseName : courseName // ignore: cast_nullable_to_non_nullable
-as String,courseGradeFormatted: null == courseGradeFormatted ? _self.courseGradeFormatted : courseGradeFormatted // ignore: cast_nullable_to_non_nullable
-as String,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
-as List<SdoGradeItem>,
+@override @pragma('vm:prefer-inline') $Res call({Object? type = null,Object? fileName = null,Object? fileUrl = null,Object? mimeType = null,Object? fileSize = null,Object? timeModified = freezed,Object? fileBytes = null,}) {
+  return _then(_SdoFile(
+type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,fileName: null == fileName ? _self.fileName : fileName // ignore: cast_nullable_to_non_nullable
+as String,fileUrl: null == fileUrl ? _self.fileUrl : fileUrl // ignore: cast_nullable_to_non_nullable
+as String,mimeType: null == mimeType ? _self.mimeType : mimeType // ignore: cast_nullable_to_non_nullable
+as String,fileSize: null == fileSize ? _self.fileSize : fileSize // ignore: cast_nullable_to_non_nullable
+as int,timeModified: freezed == timeModified ? _self.timeModified : timeModified // ignore: cast_nullable_to_non_nullable
+as DateTime?,fileBytes: null == fileBytes ? _self._fileBytes : fileBytes // ignore: cast_nullable_to_non_nullable
+as List<int>,
   ));
 }
 
@@ -1434,7 +1431,7 @@ as List<SdoGradeItem>,
 /// @nodoc
 mixin _$SdoModule {
 
- int get id; String get name; String get modName; String get url; String get description; bool get visible;
+ int get id; String get name; String get modName; int get instance; String get url; String get description; bool get visible; List<SdoFile> get contents;
 /// Create a copy of SdoModule
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1446,20 +1443,20 @@ $SdoModuleCopyWith<SdoModule> get copyWith => _$SdoModuleCopyWithImpl<SdoModule>
 @override
 bool operator ==(Object other) {
   final _this = this as SdoModule;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdoModule&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.modName, _this.modName) || other.modName == _this.modName)&&(identical(other.url, _this.url) || other.url == _this.url)&&(identical(other.description, _this.description) || other.description == _this.description)&&(identical(other.visible, _this.visible) || other.visible == _this.visible));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdoModule&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.modName, _this.modName) || other.modName == _this.modName)&&(identical(other.instance, _this.instance) || other.instance == _this.instance)&&(identical(other.url, _this.url) || other.url == _this.url)&&(identical(other.description, _this.description) || other.description == _this.description)&&(identical(other.visible, _this.visible) || other.visible == _this.visible)&&const DeepCollectionEquality().equals(other.contents, _this.contents));
 }
 
 
 @override
 int get hashCode {
   final _this = this as SdoModule;
-  return Object.hash(runtimeType,_this.id,_this.name,_this.modName,_this.url,_this.description,_this.visible);
+  return Object.hash(runtimeType,_this.id,_this.name,_this.modName,_this.instance,_this.url,_this.description,_this.visible,const DeepCollectionEquality().hash(_this.contents));
 }
 
 @override
 String toString() {
   final _this = this as SdoModule;
-  return 'SdoModule(id: ${_this.id}, name: ${_this.name}, modName: ${_this.modName}, url: ${_this.url}, description: ${_this.description}, visible: ${_this.visible})';
+  return 'SdoModule(id: ${_this.id}, name: ${_this.name}, modName: ${_this.modName}, instance: ${_this.instance}, url: ${_this.url}, description: ${_this.description}, visible: ${_this.visible}, contents: ${_this.contents})';
 }
 
 
@@ -1470,7 +1467,7 @@ abstract mixin class $SdoModuleCopyWith<$Res>  {
   factory $SdoModuleCopyWith(SdoModule value, $Res Function(SdoModule) _then) = _$SdoModuleCopyWithImpl;
 @useResult
 $Res call({
- int id, String name, String modName, String url, String description, bool visible
+ int id, String name, String modName, int instance, String url, String description, bool visible, List<SdoFile> contents
 });
 
 
@@ -1487,15 +1484,17 @@ class _$SdoModuleCopyWithImpl<$Res>
 
 /// Create a copy of SdoModule
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? modName = null,Object? url = null,Object? description = null,Object? visible = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? modName = null,Object? instance = null,Object? url = null,Object? description = null,Object? visible = null,Object? contents = null,}) {
   return _then(SdoModule(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,modName: null == modName ? _self.modName : modName // ignore: cast_nullable_to_non_nullable
-as String,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
+as String,instance: null == instance ? _self.instance : instance // ignore: cast_nullable_to_non_nullable
+as int,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,visible: null == visible ? _self.visible : visible // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,contents: null == contents ? _self.contents : contents // ignore: cast_nullable_to_non_nullable
+as List<SdoFile>,
   ));
 }
 
@@ -1580,10 +1579,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String modName,  String url,  String description,  bool visible)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String modName,  int instance,  String url,  String description,  bool visible,  List<SdoFile> contents)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SdoModule() when $default != null:
-return $default(_that.id,_that.name,_that.modName,_that.url,_that.description,_that.visible);case _:
+return $default(_that.id,_that.name,_that.modName,_that.instance,_that.url,_that.description,_that.visible,_that.contents);case _:
   return orElse();
 
 }
@@ -1601,10 +1600,10 @@ return $default(_that.id,_that.name,_that.modName,_that.url,_that.description,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String modName,  String url,  String description,  bool visible)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String modName,  int instance,  String url,  String description,  bool visible,  List<SdoFile> contents)  $default,) {final _that = this;
 switch (_that) {
 case _SdoModule():
-return $default(_that.id,_that.name,_that.modName,_that.url,_that.description,_that.visible);case _:
+return $default(_that.id,_that.name,_that.modName,_that.instance,_that.url,_that.description,_that.visible,_that.contents);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1621,10 +1620,10 @@ return $default(_that.id,_that.name,_that.modName,_that.url,_that.description,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String modName,  String url,  String description,  bool visible)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String modName,  int instance,  String url,  String description,  bool visible,  List<SdoFile> contents)?  $default,) {final _that = this;
 switch (_that) {
 case _SdoModule() when $default != null:
-return $default(_that.id,_that.name,_that.modName,_that.url,_that.description,_that.visible);case _:
+return $default(_that.id,_that.name,_that.modName,_that.instance,_that.url,_that.description,_that.visible,_that.contents);case _:
   return null;
 
 }
@@ -1636,15 +1635,23 @@ return $default(_that.id,_that.name,_that.modName,_that.url,_that.description,_t
 
 
 class _SdoModule implements SdoModule {
-  const _SdoModule({required this.id, required this.name, this.modName = '', this.url = '', this.description = '', this.visible = true});
+  const _SdoModule({required this.id, required this.name, this.modName = '', this.instance = 0, this.url = '', this.description = '', this.visible = true,  List<SdoFile> contents = const <SdoFile>[]}): _contents = contents;
   
 
 @override final  int id;
 @override final  String name;
 @override@JsonKey() final  String modName;
+@override@JsonKey() final  int instance;
 @override@JsonKey() final  String url;
 @override@JsonKey() final  String description;
 @override@JsonKey() final  bool visible;
+ final  List<SdoFile> _contents;
+@override@JsonKey() List<SdoFile> get contents {
+  if (_contents is EqualUnmodifiableListView) return _contents;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_contents);
+}
+
 
 /// Create a copy of SdoModule
 /// with the given fields replaced by the non-null parameter values.
@@ -1656,18 +1663,18 @@ _$SdoModuleCopyWith<_SdoModule> get copyWith => __$SdoModuleCopyWithImpl<_SdoMod
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SdoModule&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.modName, modName) || other.modName == modName)&&(identical(other.url, url) || other.url == url)&&(identical(other.description, description) || other.description == description)&&(identical(other.visible, visible) || other.visible == visible));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SdoModule&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.modName, modName) || other.modName == modName)&&(identical(other.instance, instance) || other.instance == instance)&&(identical(other.url, url) || other.url == url)&&(identical(other.description, description) || other.description == description)&&(identical(other.visible, visible) || other.visible == visible)&&const DeepCollectionEquality().equals(other.contents, _contents));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,id,name,modName,url,description,visible);
+    return Object.hash(runtimeType,id,name,modName,instance,url,description,visible,const DeepCollectionEquality().hash(_contents));
 }
 
 @override
 String toString() {
-    return 'SdoModule(id: $id, name: $name, modName: $modName, url: $url, description: $description, visible: $visible)';
+    return 'SdoModule(id: $id, name: $name, modName: $modName, instance: $instance, url: $url, description: $description, visible: $visible, contents: $contents)';
 }
 
 
@@ -1678,7 +1685,7 @@ abstract mixin class _$SdoModuleCopyWith<$Res> implements $SdoModuleCopyWith<$Re
   factory _$SdoModuleCopyWith(_SdoModule value, $Res Function(_SdoModule) _then) = __$SdoModuleCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name, String modName, String url, String description, bool visible
+ int id, String name, String modName, int instance, String url, String description, bool visible, List<SdoFile> contents
 });
 
 
@@ -1695,15 +1702,17 @@ class __$SdoModuleCopyWithImpl<$Res>
 
 /// Create a copy of SdoModule
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? modName = null,Object? url = null,Object? description = null,Object? visible = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? modName = null,Object? instance = null,Object? url = null,Object? description = null,Object? visible = null,Object? contents = null,}) {
   return _then(_SdoModule(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,modName: null == modName ? _self.modName : modName // ignore: cast_nullable_to_non_nullable
-as String,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
+as String,instance: null == instance ? _self.instance : instance // ignore: cast_nullable_to_non_nullable
+as int,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,visible: null == visible ? _self.visible : visible // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,contents: null == contents ? _self._contents : contents // ignore: cast_nullable_to_non_nullable
+as List<SdoFile>,
   ));
 }
 
@@ -1983,6 +1992,894 @@ as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nu
 as String,summary: null == summary ? _self.summary : summary // ignore: cast_nullable_to_non_nullable
 as String,modules: null == modules ? _self._modules : modules // ignore: cast_nullable_to_non_nullable
 as List<SdoModule>,
+  ));
+}
+
+
+}
+
+/// @nodoc
+mixin _$SdoAssignment {
+
+ int get id; int get courseId; String get name; int get courseModuleId; String get description; DateTime? get dueDate; DateTime? get allowFromDate; DateTime? get cutoffDate; int get maxAttempts; bool get requiresText; bool get requiresFile; SdoSubmissionStatus get status; DateTime? get submittedAt; String get onlineText; List<SdoFile> get files;
+/// Create a copy of SdoAssignment
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdoAssignmentCopyWith<SdoAssignment> get copyWith => _$SdoAssignmentCopyWithImpl<SdoAssignment>(this as SdoAssignment, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  final _this = this as SdoAssignment;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdoAssignment&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.courseId, _this.courseId) || other.courseId == _this.courseId)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.courseModuleId, _this.courseModuleId) || other.courseModuleId == _this.courseModuleId)&&(identical(other.description, _this.description) || other.description == _this.description)&&(identical(other.dueDate, _this.dueDate) || other.dueDate == _this.dueDate)&&(identical(other.allowFromDate, _this.allowFromDate) || other.allowFromDate == _this.allowFromDate)&&(identical(other.cutoffDate, _this.cutoffDate) || other.cutoffDate == _this.cutoffDate)&&(identical(other.maxAttempts, _this.maxAttempts) || other.maxAttempts == _this.maxAttempts)&&(identical(other.requiresText, _this.requiresText) || other.requiresText == _this.requiresText)&&(identical(other.requiresFile, _this.requiresFile) || other.requiresFile == _this.requiresFile)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.submittedAt, _this.submittedAt) || other.submittedAt == _this.submittedAt)&&(identical(other.onlineText, _this.onlineText) || other.onlineText == _this.onlineText)&&const DeepCollectionEquality().equals(other.files, _this.files));
+}
+
+
+@override
+int get hashCode {
+  final _this = this as SdoAssignment;
+  return Object.hash(runtimeType,_this.id,_this.courseId,_this.name,_this.courseModuleId,_this.description,_this.dueDate,_this.allowFromDate,_this.cutoffDate,_this.maxAttempts,_this.requiresText,_this.requiresFile,_this.status,_this.submittedAt,_this.onlineText,const DeepCollectionEquality().hash(_this.files));
+}
+
+@override
+String toString() {
+  final _this = this as SdoAssignment;
+  return 'SdoAssignment(id: ${_this.id}, courseId: ${_this.courseId}, name: ${_this.name}, courseModuleId: ${_this.courseModuleId}, description: ${_this.description}, dueDate: ${_this.dueDate}, allowFromDate: ${_this.allowFromDate}, cutoffDate: ${_this.cutoffDate}, maxAttempts: ${_this.maxAttempts}, requiresText: ${_this.requiresText}, requiresFile: ${_this.requiresFile}, status: ${_this.status}, submittedAt: ${_this.submittedAt}, onlineText: ${_this.onlineText}, files: ${_this.files})';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdoAssignmentCopyWith<$Res>  {
+  factory $SdoAssignmentCopyWith(SdoAssignment value, $Res Function(SdoAssignment) _then) = _$SdoAssignmentCopyWithImpl;
+@useResult
+$Res call({
+ int id, int courseId, String name, int courseModuleId, String description, DateTime? dueDate, DateTime? allowFromDate, DateTime? cutoffDate, int maxAttempts, bool requiresText, bool requiresFile, SdoSubmissionStatus status, DateTime? submittedAt, String onlineText, List<SdoFile> files
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdoAssignmentCopyWithImpl<$Res>
+    implements $SdoAssignmentCopyWith<$Res> {
+  _$SdoAssignmentCopyWithImpl(this._self, this._then);
+
+  final SdoAssignment _self;
+  final $Res Function(SdoAssignment) _then;
+
+/// Create a copy of SdoAssignment
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? courseId = null,Object? name = null,Object? courseModuleId = null,Object? description = null,Object? dueDate = freezed,Object? allowFromDate = freezed,Object? cutoffDate = freezed,Object? maxAttempts = null,Object? requiresText = null,Object? requiresFile = null,Object? status = null,Object? submittedAt = freezed,Object? onlineText = null,Object? files = null,}) {
+  return _then(SdoAssignment(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,courseId: null == courseId ? _self.courseId : courseId // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,courseModuleId: null == courseModuleId ? _self.courseModuleId : courseModuleId // ignore: cast_nullable_to_non_nullable
+as int,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String,dueDate: freezed == dueDate ? _self.dueDate : dueDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,allowFromDate: freezed == allowFromDate ? _self.allowFromDate : allowFromDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,cutoffDate: freezed == cutoffDate ? _self.cutoffDate : cutoffDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,maxAttempts: null == maxAttempts ? _self.maxAttempts : maxAttempts // ignore: cast_nullable_to_non_nullable
+as int,requiresText: null == requiresText ? _self.requiresText : requiresText // ignore: cast_nullable_to_non_nullable
+as bool,requiresFile: null == requiresFile ? _self.requiresFile : requiresFile // ignore: cast_nullable_to_non_nullable
+as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as SdoSubmissionStatus,submittedAt: freezed == submittedAt ? _self.submittedAt : submittedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,onlineText: null == onlineText ? _self.onlineText : onlineText // ignore: cast_nullable_to_non_nullable
+as String,files: null == files ? _self.files : files // ignore: cast_nullable_to_non_nullable
+as List<SdoFile>,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [SdoAssignment].
+extension SdoAssignmentPatterns on SdoAssignment {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SdoAssignment value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _SdoAssignment() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SdoAssignment value)  $default,){
+final _that = this;
+switch (_that) {
+case _SdoAssignment():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SdoAssignment value)?  $default,){
+final _that = this;
+switch (_that) {
+case _SdoAssignment() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  int courseId,  String name,  int courseModuleId,  String description,  DateTime? dueDate,  DateTime? allowFromDate,  DateTime? cutoffDate,  int maxAttempts,  bool requiresText,  bool requiresFile,  SdoSubmissionStatus status,  DateTime? submittedAt,  String onlineText,  List<SdoFile> files)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _SdoAssignment() when $default != null:
+return $default(_that.id,_that.courseId,_that.name,_that.courseModuleId,_that.description,_that.dueDate,_that.allowFromDate,_that.cutoffDate,_that.maxAttempts,_that.requiresText,_that.requiresFile,_that.status,_that.submittedAt,_that.onlineText,_that.files);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  int courseId,  String name,  int courseModuleId,  String description,  DateTime? dueDate,  DateTime? allowFromDate,  DateTime? cutoffDate,  int maxAttempts,  bool requiresText,  bool requiresFile,  SdoSubmissionStatus status,  DateTime? submittedAt,  String onlineText,  List<SdoFile> files)  $default,) {final _that = this;
+switch (_that) {
+case _SdoAssignment():
+return $default(_that.id,_that.courseId,_that.name,_that.courseModuleId,_that.description,_that.dueDate,_that.allowFromDate,_that.cutoffDate,_that.maxAttempts,_that.requiresText,_that.requiresFile,_that.status,_that.submittedAt,_that.onlineText,_that.files);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  int courseId,  String name,  int courseModuleId,  String description,  DateTime? dueDate,  DateTime? allowFromDate,  DateTime? cutoffDate,  int maxAttempts,  bool requiresText,  bool requiresFile,  SdoSubmissionStatus status,  DateTime? submittedAt,  String onlineText,  List<SdoFile> files)?  $default,) {final _that = this;
+switch (_that) {
+case _SdoAssignment() when $default != null:
+return $default(_that.id,_that.courseId,_that.name,_that.courseModuleId,_that.description,_that.dueDate,_that.allowFromDate,_that.cutoffDate,_that.maxAttempts,_that.requiresText,_that.requiresFile,_that.status,_that.submittedAt,_that.onlineText,_that.files);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _SdoAssignment implements SdoAssignment {
+  const _SdoAssignment({required this.id, required this.courseId, required this.name, this.courseModuleId = 0, this.description = '', this.dueDate, this.allowFromDate, this.cutoffDate, this.maxAttempts = 0, this.requiresText = false, this.requiresFile = false, this.status = SdoSubmissionStatus.newSubmission, this.submittedAt, this.onlineText = '',  List<SdoFile> files = const <SdoFile>[]}): _files = files;
+  
+
+@override final  int id;
+@override final  int courseId;
+@override final  String name;
+@override@JsonKey() final  int courseModuleId;
+@override@JsonKey() final  String description;
+@override final  DateTime? dueDate;
+@override final  DateTime? allowFromDate;
+@override final  DateTime? cutoffDate;
+@override@JsonKey() final  int maxAttempts;
+@override@JsonKey() final  bool requiresText;
+@override@JsonKey() final  bool requiresFile;
+@override@JsonKey() final  SdoSubmissionStatus status;
+@override final  DateTime? submittedAt;
+@override@JsonKey() final  String onlineText;
+ final  List<SdoFile> _files;
+@override@JsonKey() List<SdoFile> get files {
+  if (_files is EqualUnmodifiableListView) return _files;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_files);
+}
+
+
+/// Create a copy of SdoAssignment
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SdoAssignmentCopyWith<_SdoAssignment> get copyWith => __$SdoAssignmentCopyWithImpl<_SdoAssignment>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SdoAssignment&&(identical(other.id, id) || other.id == id)&&(identical(other.courseId, courseId) || other.courseId == courseId)&&(identical(other.name, name) || other.name == name)&&(identical(other.courseModuleId, courseModuleId) || other.courseModuleId == courseModuleId)&&(identical(other.description, description) || other.description == description)&&(identical(other.dueDate, dueDate) || other.dueDate == dueDate)&&(identical(other.allowFromDate, allowFromDate) || other.allowFromDate == allowFromDate)&&(identical(other.cutoffDate, cutoffDate) || other.cutoffDate == cutoffDate)&&(identical(other.maxAttempts, maxAttempts) || other.maxAttempts == maxAttempts)&&(identical(other.requiresText, requiresText) || other.requiresText == requiresText)&&(identical(other.requiresFile, requiresFile) || other.requiresFile == requiresFile)&&(identical(other.status, status) || other.status == status)&&(identical(other.submittedAt, submittedAt) || other.submittedAt == submittedAt)&&(identical(other.onlineText, onlineText) || other.onlineText == onlineText)&&const DeepCollectionEquality().equals(other.files, _files));
+}
+
+
+@override
+int get hashCode {
+    return Object.hash(runtimeType,id,courseId,name,courseModuleId,description,dueDate,allowFromDate,cutoffDate,maxAttempts,requiresText,requiresFile,status,submittedAt,onlineText,const DeepCollectionEquality().hash(_files));
+}
+
+@override
+String toString() {
+    return 'SdoAssignment(id: $id, courseId: $courseId, name: $name, courseModuleId: $courseModuleId, description: $description, dueDate: $dueDate, allowFromDate: $allowFromDate, cutoffDate: $cutoffDate, maxAttempts: $maxAttempts, requiresText: $requiresText, requiresFile: $requiresFile, status: $status, submittedAt: $submittedAt, onlineText: $onlineText, files: $files)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SdoAssignmentCopyWith<$Res> implements $SdoAssignmentCopyWith<$Res> {
+  factory _$SdoAssignmentCopyWith(_SdoAssignment value, $Res Function(_SdoAssignment) _then) = __$SdoAssignmentCopyWithImpl;
+@override @useResult
+$Res call({
+ int id, int courseId, String name, int courseModuleId, String description, DateTime? dueDate, DateTime? allowFromDate, DateTime? cutoffDate, int maxAttempts, bool requiresText, bool requiresFile, SdoSubmissionStatus status, DateTime? submittedAt, String onlineText, List<SdoFile> files
+});
+
+
+
+
+}
+/// @nodoc
+class __$SdoAssignmentCopyWithImpl<$Res>
+    implements _$SdoAssignmentCopyWith<$Res> {
+  __$SdoAssignmentCopyWithImpl(this._self, this._then);
+
+  final _SdoAssignment _self;
+  final $Res Function(_SdoAssignment) _then;
+
+/// Create a copy of SdoAssignment
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? courseId = null,Object? name = null,Object? courseModuleId = null,Object? description = null,Object? dueDate = freezed,Object? allowFromDate = freezed,Object? cutoffDate = freezed,Object? maxAttempts = null,Object? requiresText = null,Object? requiresFile = null,Object? status = null,Object? submittedAt = freezed,Object? onlineText = null,Object? files = null,}) {
+  return _then(_SdoAssignment(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,courseId: null == courseId ? _self.courseId : courseId // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,courseModuleId: null == courseModuleId ? _self.courseModuleId : courseModuleId // ignore: cast_nullable_to_non_nullable
+as int,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String,dueDate: freezed == dueDate ? _self.dueDate : dueDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,allowFromDate: freezed == allowFromDate ? _self.allowFromDate : allowFromDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,cutoffDate: freezed == cutoffDate ? _self.cutoffDate : cutoffDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,maxAttempts: null == maxAttempts ? _self.maxAttempts : maxAttempts // ignore: cast_nullable_to_non_nullable
+as int,requiresText: null == requiresText ? _self.requiresText : requiresText // ignore: cast_nullable_to_non_nullable
+as bool,requiresFile: null == requiresFile ? _self.requiresFile : requiresFile // ignore: cast_nullable_to_non_nullable
+as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as SdoSubmissionStatus,submittedAt: freezed == submittedAt ? _self.submittedAt : submittedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,onlineText: null == onlineText ? _self.onlineText : onlineText // ignore: cast_nullable_to_non_nullable
+as String,files: null == files ? _self._files : files // ignore: cast_nullable_to_non_nullable
+as List<SdoFile>,
+  ));
+}
+
+
+}
+
+/// @nodoc
+mixin _$SdoQuiz {
+
+ int get id; int get courseId; String get name; int get courseModuleId; String get intro; DateTime? get timeOpen; DateTime? get timeClose; int get timeLimit; int get maxAttempts; int get gradeMethod; bool get hasQuestions;
+/// Create a copy of SdoQuiz
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdoQuizCopyWith<SdoQuiz> get copyWith => _$SdoQuizCopyWithImpl<SdoQuiz>(this as SdoQuiz, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  final _this = this as SdoQuiz;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdoQuiz&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.courseId, _this.courseId) || other.courseId == _this.courseId)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.courseModuleId, _this.courseModuleId) || other.courseModuleId == _this.courseModuleId)&&(identical(other.intro, _this.intro) || other.intro == _this.intro)&&(identical(other.timeOpen, _this.timeOpen) || other.timeOpen == _this.timeOpen)&&(identical(other.timeClose, _this.timeClose) || other.timeClose == _this.timeClose)&&(identical(other.timeLimit, _this.timeLimit) || other.timeLimit == _this.timeLimit)&&(identical(other.maxAttempts, _this.maxAttempts) || other.maxAttempts == _this.maxAttempts)&&(identical(other.gradeMethod, _this.gradeMethod) || other.gradeMethod == _this.gradeMethod)&&(identical(other.hasQuestions, _this.hasQuestions) || other.hasQuestions == _this.hasQuestions));
+}
+
+
+@override
+int get hashCode {
+  final _this = this as SdoQuiz;
+  return Object.hash(runtimeType,_this.id,_this.courseId,_this.name,_this.courseModuleId,_this.intro,_this.timeOpen,_this.timeClose,_this.timeLimit,_this.maxAttempts,_this.gradeMethod,_this.hasQuestions);
+}
+
+@override
+String toString() {
+  final _this = this as SdoQuiz;
+  return 'SdoQuiz(id: ${_this.id}, courseId: ${_this.courseId}, name: ${_this.name}, courseModuleId: ${_this.courseModuleId}, intro: ${_this.intro}, timeOpen: ${_this.timeOpen}, timeClose: ${_this.timeClose}, timeLimit: ${_this.timeLimit}, maxAttempts: ${_this.maxAttempts}, gradeMethod: ${_this.gradeMethod}, hasQuestions: ${_this.hasQuestions})';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdoQuizCopyWith<$Res>  {
+  factory $SdoQuizCopyWith(SdoQuiz value, $Res Function(SdoQuiz) _then) = _$SdoQuizCopyWithImpl;
+@useResult
+$Res call({
+ int id, int courseId, String name, int courseModuleId, String intro, DateTime? timeOpen, DateTime? timeClose, int timeLimit, int maxAttempts, int gradeMethod, bool hasQuestions
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdoQuizCopyWithImpl<$Res>
+    implements $SdoQuizCopyWith<$Res> {
+  _$SdoQuizCopyWithImpl(this._self, this._then);
+
+  final SdoQuiz _self;
+  final $Res Function(SdoQuiz) _then;
+
+/// Create a copy of SdoQuiz
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? courseId = null,Object? name = null,Object? courseModuleId = null,Object? intro = null,Object? timeOpen = freezed,Object? timeClose = freezed,Object? timeLimit = null,Object? maxAttempts = null,Object? gradeMethod = null,Object? hasQuestions = null,}) {
+  return _then(SdoQuiz(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,courseId: null == courseId ? _self.courseId : courseId // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,courseModuleId: null == courseModuleId ? _self.courseModuleId : courseModuleId // ignore: cast_nullable_to_non_nullable
+as int,intro: null == intro ? _self.intro : intro // ignore: cast_nullable_to_non_nullable
+as String,timeOpen: freezed == timeOpen ? _self.timeOpen : timeOpen // ignore: cast_nullable_to_non_nullable
+as DateTime?,timeClose: freezed == timeClose ? _self.timeClose : timeClose // ignore: cast_nullable_to_non_nullable
+as DateTime?,timeLimit: null == timeLimit ? _self.timeLimit : timeLimit // ignore: cast_nullable_to_non_nullable
+as int,maxAttempts: null == maxAttempts ? _self.maxAttempts : maxAttempts // ignore: cast_nullable_to_non_nullable
+as int,gradeMethod: null == gradeMethod ? _self.gradeMethod : gradeMethod // ignore: cast_nullable_to_non_nullable
+as int,hasQuestions: null == hasQuestions ? _self.hasQuestions : hasQuestions // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [SdoQuiz].
+extension SdoQuizPatterns on SdoQuiz {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SdoQuiz value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _SdoQuiz() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SdoQuiz value)  $default,){
+final _that = this;
+switch (_that) {
+case _SdoQuiz():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SdoQuiz value)?  $default,){
+final _that = this;
+switch (_that) {
+case _SdoQuiz() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  int courseId,  String name,  int courseModuleId,  String intro,  DateTime? timeOpen,  DateTime? timeClose,  int timeLimit,  int maxAttempts,  int gradeMethod,  bool hasQuestions)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _SdoQuiz() when $default != null:
+return $default(_that.id,_that.courseId,_that.name,_that.courseModuleId,_that.intro,_that.timeOpen,_that.timeClose,_that.timeLimit,_that.maxAttempts,_that.gradeMethod,_that.hasQuestions);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  int courseId,  String name,  int courseModuleId,  String intro,  DateTime? timeOpen,  DateTime? timeClose,  int timeLimit,  int maxAttempts,  int gradeMethod,  bool hasQuestions)  $default,) {final _that = this;
+switch (_that) {
+case _SdoQuiz():
+return $default(_that.id,_that.courseId,_that.name,_that.courseModuleId,_that.intro,_that.timeOpen,_that.timeClose,_that.timeLimit,_that.maxAttempts,_that.gradeMethod,_that.hasQuestions);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  int courseId,  String name,  int courseModuleId,  String intro,  DateTime? timeOpen,  DateTime? timeClose,  int timeLimit,  int maxAttempts,  int gradeMethod,  bool hasQuestions)?  $default,) {final _that = this;
+switch (_that) {
+case _SdoQuiz() when $default != null:
+return $default(_that.id,_that.courseId,_that.name,_that.courseModuleId,_that.intro,_that.timeOpen,_that.timeClose,_that.timeLimit,_that.maxAttempts,_that.gradeMethod,_that.hasQuestions);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _SdoQuiz implements SdoQuiz {
+  const _SdoQuiz({required this.id, required this.courseId, required this.name, this.courseModuleId = 0, this.intro = '', this.timeOpen, this.timeClose, this.timeLimit = 0, this.maxAttempts = 0, this.gradeMethod = 0, this.hasQuestions = false});
+  
+
+@override final  int id;
+@override final  int courseId;
+@override final  String name;
+@override@JsonKey() final  int courseModuleId;
+@override@JsonKey() final  String intro;
+@override final  DateTime? timeOpen;
+@override final  DateTime? timeClose;
+@override@JsonKey() final  int timeLimit;
+@override@JsonKey() final  int maxAttempts;
+@override@JsonKey() final  int gradeMethod;
+@override@JsonKey() final  bool hasQuestions;
+
+/// Create a copy of SdoQuiz
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SdoQuizCopyWith<_SdoQuiz> get copyWith => __$SdoQuizCopyWithImpl<_SdoQuiz>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SdoQuiz&&(identical(other.id, id) || other.id == id)&&(identical(other.courseId, courseId) || other.courseId == courseId)&&(identical(other.name, name) || other.name == name)&&(identical(other.courseModuleId, courseModuleId) || other.courseModuleId == courseModuleId)&&(identical(other.intro, intro) || other.intro == intro)&&(identical(other.timeOpen, timeOpen) || other.timeOpen == timeOpen)&&(identical(other.timeClose, timeClose) || other.timeClose == timeClose)&&(identical(other.timeLimit, timeLimit) || other.timeLimit == timeLimit)&&(identical(other.maxAttempts, maxAttempts) || other.maxAttempts == maxAttempts)&&(identical(other.gradeMethod, gradeMethod) || other.gradeMethod == gradeMethod)&&(identical(other.hasQuestions, hasQuestions) || other.hasQuestions == hasQuestions));
+}
+
+
+@override
+int get hashCode {
+    return Object.hash(runtimeType,id,courseId,name,courseModuleId,intro,timeOpen,timeClose,timeLimit,maxAttempts,gradeMethod,hasQuestions);
+}
+
+@override
+String toString() {
+    return 'SdoQuiz(id: $id, courseId: $courseId, name: $name, courseModuleId: $courseModuleId, intro: $intro, timeOpen: $timeOpen, timeClose: $timeClose, timeLimit: $timeLimit, maxAttempts: $maxAttempts, gradeMethod: $gradeMethod, hasQuestions: $hasQuestions)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SdoQuizCopyWith<$Res> implements $SdoQuizCopyWith<$Res> {
+  factory _$SdoQuizCopyWith(_SdoQuiz value, $Res Function(_SdoQuiz) _then) = __$SdoQuizCopyWithImpl;
+@override @useResult
+$Res call({
+ int id, int courseId, String name, int courseModuleId, String intro, DateTime? timeOpen, DateTime? timeClose, int timeLimit, int maxAttempts, int gradeMethod, bool hasQuestions
+});
+
+
+
+
+}
+/// @nodoc
+class __$SdoQuizCopyWithImpl<$Res>
+    implements _$SdoQuizCopyWith<$Res> {
+  __$SdoQuizCopyWithImpl(this._self, this._then);
+
+  final _SdoQuiz _self;
+  final $Res Function(_SdoQuiz) _then;
+
+/// Create a copy of SdoQuiz
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? courseId = null,Object? name = null,Object? courseModuleId = null,Object? intro = null,Object? timeOpen = freezed,Object? timeClose = freezed,Object? timeLimit = null,Object? maxAttempts = null,Object? gradeMethod = null,Object? hasQuestions = null,}) {
+  return _then(_SdoQuiz(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,courseId: null == courseId ? _self.courseId : courseId // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,courseModuleId: null == courseModuleId ? _self.courseModuleId : courseModuleId // ignore: cast_nullable_to_non_nullable
+as int,intro: null == intro ? _self.intro : intro // ignore: cast_nullable_to_non_nullable
+as String,timeOpen: freezed == timeOpen ? _self.timeOpen : timeOpen // ignore: cast_nullable_to_non_nullable
+as DateTime?,timeClose: freezed == timeClose ? _self.timeClose : timeClose // ignore: cast_nullable_to_non_nullable
+as DateTime?,timeLimit: null == timeLimit ? _self.timeLimit : timeLimit // ignore: cast_nullable_to_non_nullable
+as int,maxAttempts: null == maxAttempts ? _self.maxAttempts : maxAttempts // ignore: cast_nullable_to_non_nullable
+as int,gradeMethod: null == gradeMethod ? _self.gradeMethod : gradeMethod // ignore: cast_nullable_to_non_nullable
+as int,hasQuestions: null == hasQuestions ? _self.hasQuestions : hasQuestions // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+
+
+}
+
+/// @nodoc
+mixin _$SdoQuizAttempt {
+
+ int get id; int get quizId; int get attempt; String get state; DateTime? get timeStart; DateTime? get timeFinish; double? get grade;
+/// Create a copy of SdoQuizAttempt
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdoQuizAttemptCopyWith<SdoQuizAttempt> get copyWith => _$SdoQuizAttemptCopyWithImpl<SdoQuizAttempt>(this as SdoQuizAttempt, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  final _this = this as SdoQuizAttempt;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdoQuizAttempt&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.quizId, _this.quizId) || other.quizId == _this.quizId)&&(identical(other.attempt, _this.attempt) || other.attempt == _this.attempt)&&(identical(other.state, _this.state) || other.state == _this.state)&&(identical(other.timeStart, _this.timeStart) || other.timeStart == _this.timeStart)&&(identical(other.timeFinish, _this.timeFinish) || other.timeFinish == _this.timeFinish)&&(identical(other.grade, _this.grade) || other.grade == _this.grade));
+}
+
+
+@override
+int get hashCode {
+  final _this = this as SdoQuizAttempt;
+  return Object.hash(runtimeType,_this.id,_this.quizId,_this.attempt,_this.state,_this.timeStart,_this.timeFinish,_this.grade);
+}
+
+@override
+String toString() {
+  final _this = this as SdoQuizAttempt;
+  return 'SdoQuizAttempt(id: ${_this.id}, quizId: ${_this.quizId}, attempt: ${_this.attempt}, state: ${_this.state}, timeStart: ${_this.timeStart}, timeFinish: ${_this.timeFinish}, grade: ${_this.grade})';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdoQuizAttemptCopyWith<$Res>  {
+  factory $SdoQuizAttemptCopyWith(SdoQuizAttempt value, $Res Function(SdoQuizAttempt) _then) = _$SdoQuizAttemptCopyWithImpl;
+@useResult
+$Res call({
+ int id, int quizId, int attempt, String state, DateTime? timeStart, DateTime? timeFinish, double? grade
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdoQuizAttemptCopyWithImpl<$Res>
+    implements $SdoQuizAttemptCopyWith<$Res> {
+  _$SdoQuizAttemptCopyWithImpl(this._self, this._then);
+
+  final SdoQuizAttempt _self;
+  final $Res Function(SdoQuizAttempt) _then;
+
+/// Create a copy of SdoQuizAttempt
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? quizId = null,Object? attempt = null,Object? state = null,Object? timeStart = freezed,Object? timeFinish = freezed,Object? grade = freezed,}) {
+  return _then(SdoQuizAttempt(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,quizId: null == quizId ? _self.quizId : quizId // ignore: cast_nullable_to_non_nullable
+as int,attempt: null == attempt ? _self.attempt : attempt // ignore: cast_nullable_to_non_nullable
+as int,state: null == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
+as String,timeStart: freezed == timeStart ? _self.timeStart : timeStart // ignore: cast_nullable_to_non_nullable
+as DateTime?,timeFinish: freezed == timeFinish ? _self.timeFinish : timeFinish // ignore: cast_nullable_to_non_nullable
+as DateTime?,grade: freezed == grade ? _self.grade : grade // ignore: cast_nullable_to_non_nullable
+as double?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [SdoQuizAttempt].
+extension SdoQuizAttemptPatterns on SdoQuizAttempt {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SdoQuizAttempt value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _SdoQuizAttempt() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SdoQuizAttempt value)  $default,){
+final _that = this;
+switch (_that) {
+case _SdoQuizAttempt():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SdoQuizAttempt value)?  $default,){
+final _that = this;
+switch (_that) {
+case _SdoQuizAttempt() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  int quizId,  int attempt,  String state,  DateTime? timeStart,  DateTime? timeFinish,  double? grade)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _SdoQuizAttempt() when $default != null:
+return $default(_that.id,_that.quizId,_that.attempt,_that.state,_that.timeStart,_that.timeFinish,_that.grade);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  int quizId,  int attempt,  String state,  DateTime? timeStart,  DateTime? timeFinish,  double? grade)  $default,) {final _that = this;
+switch (_that) {
+case _SdoQuizAttempt():
+return $default(_that.id,_that.quizId,_that.attempt,_that.state,_that.timeStart,_that.timeFinish,_that.grade);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  int quizId,  int attempt,  String state,  DateTime? timeStart,  DateTime? timeFinish,  double? grade)?  $default,) {final _that = this;
+switch (_that) {
+case _SdoQuizAttempt() when $default != null:
+return $default(_that.id,_that.quizId,_that.attempt,_that.state,_that.timeStart,_that.timeFinish,_that.grade);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _SdoQuizAttempt implements SdoQuizAttempt {
+  const _SdoQuizAttempt({required this.id, required this.quizId, this.attempt = 1, this.state = '', this.timeStart, this.timeFinish, this.grade});
+  
+
+@override final  int id;
+@override final  int quizId;
+@override@JsonKey() final  int attempt;
+@override@JsonKey() final  String state;
+@override final  DateTime? timeStart;
+@override final  DateTime? timeFinish;
+@override final  double? grade;
+
+/// Create a copy of SdoQuizAttempt
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SdoQuizAttemptCopyWith<_SdoQuizAttempt> get copyWith => __$SdoQuizAttemptCopyWithImpl<_SdoQuizAttempt>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SdoQuizAttempt&&(identical(other.id, id) || other.id == id)&&(identical(other.quizId, quizId) || other.quizId == quizId)&&(identical(other.attempt, attempt) || other.attempt == attempt)&&(identical(other.state, state) || other.state == state)&&(identical(other.timeStart, timeStart) || other.timeStart == timeStart)&&(identical(other.timeFinish, timeFinish) || other.timeFinish == timeFinish)&&(identical(other.grade, grade) || other.grade == grade));
+}
+
+
+@override
+int get hashCode {
+    return Object.hash(runtimeType,id,quizId,attempt,state,timeStart,timeFinish,grade);
+}
+
+@override
+String toString() {
+    return 'SdoQuizAttempt(id: $id, quizId: $quizId, attempt: $attempt, state: $state, timeStart: $timeStart, timeFinish: $timeFinish, grade: $grade)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SdoQuizAttemptCopyWith<$Res> implements $SdoQuizAttemptCopyWith<$Res> {
+  factory _$SdoQuizAttemptCopyWith(_SdoQuizAttempt value, $Res Function(_SdoQuizAttempt) _then) = __$SdoQuizAttemptCopyWithImpl;
+@override @useResult
+$Res call({
+ int id, int quizId, int attempt, String state, DateTime? timeStart, DateTime? timeFinish, double? grade
+});
+
+
+
+
+}
+/// @nodoc
+class __$SdoQuizAttemptCopyWithImpl<$Res>
+    implements _$SdoQuizAttemptCopyWith<$Res> {
+  __$SdoQuizAttemptCopyWithImpl(this._self, this._then);
+
+  final _SdoQuizAttempt _self;
+  final $Res Function(_SdoQuizAttempt) _then;
+
+/// Create a copy of SdoQuizAttempt
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? quizId = null,Object? attempt = null,Object? state = null,Object? timeStart = freezed,Object? timeFinish = freezed,Object? grade = freezed,}) {
+  return _then(_SdoQuizAttempt(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,quizId: null == quizId ? _self.quizId : quizId // ignore: cast_nullable_to_non_nullable
+as int,attempt: null == attempt ? _self.attempt : attempt // ignore: cast_nullable_to_non_nullable
+as int,state: null == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
+as String,timeStart: freezed == timeStart ? _self.timeStart : timeStart // ignore: cast_nullable_to_non_nullable
+as DateTime?,timeFinish: freezed == timeFinish ? _self.timeFinish : timeFinish // ignore: cast_nullable_to_non_nullable
+as DateTime?,grade: freezed == grade ? _self.grade : grade // ignore: cast_nullable_to_non_nullable
+as double?,
   ));
 }
 

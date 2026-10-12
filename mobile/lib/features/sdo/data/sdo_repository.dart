@@ -44,6 +44,13 @@ class SdoRepository {
     });
   }
 
+  Future<List<SdoCategory>> fetchCategories() {
+    return _guard(() async {
+      final String token = await _requireToken();
+      return _source.fetchCategories(token);
+    });
+  }
+
   Future<List<SdoDeadline>> fetchDeadlines() {
     return _guard(() async {
       final String token = await _requireToken();
@@ -59,11 +66,18 @@ class SdoRepository {
     });
   }
 
-  Future<SdoCourseGrades> fetchCourseGrades(int courseId) {
+  Future<List<SdoSection>> fetchCourseContents(int courseId) {
+    return _guard(() async {
+      final String token = await _requireToken();
+      return _source.fetchCourseContents(token, courseId: courseId);
+    });
+  }
+
+  Future<List<SdoAssignment>> fetchAssignments(int courseId) {
     return _guard(() async {
       final String token = await _requireToken();
       final SdoProfile profile = await _profile(token);
-      return _source.fetchCourseGrades(
+      return _source.fetchAssignments(
         token,
         courseId: courseId,
         userId: profile.userId,
@@ -71,10 +85,64 @@ class SdoRepository {
     });
   }
 
-  Future<List<SdoSection>> fetchCourseContents(int courseId) {
+  Future<SdoSubmission> fetchSubmission(int assignmentId) {
     return _guard(() async {
       final String token = await _requireToken();
-      return _source.fetchCourseContents(token, courseId: courseId);
+      return _source.fetchSubmission(token, assignmentId: assignmentId);
+    });
+  }
+
+  Future<List<SdoQuiz>> fetchQuizzes(int courseId) {
+    return _guard(() async {
+      final String token = await _requireToken();
+      return _source.fetchQuizzes(token, courseId: courseId);
+    });
+  }
+
+  Future<List<SdoQuizAttempt>> fetchQuizAttempts(int quizId) {
+    return _guard(() async {
+      final String token = await _requireToken();
+      final SdoProfile profile = await _profile(token);
+      return _source.fetchQuizAttempts(
+        token,
+        quizId: quizId,
+        userId: profile.userId,
+      );
+    });
+  }
+
+  Future<List<int>> downloadFile(String url) {
+    return _guard(() async {
+      final String token = await _requireToken();
+      return _source.downloadFile(url, token: token);
+    });
+  }
+
+  Future<void> saveSubmission({
+    required int assignmentId,
+    required String? onlineText,
+    required String? fileName,
+    required List<int>? fileBytes,
+  }) {
+    return _guard(() async {
+      final String token = await _requireToken();
+      final SdoProfile profile = await _profile(token);
+      return _source.saveSubmission(
+        token,
+        assignmentId: assignmentId,
+        userId: profile.userId,
+        onlineText: onlineText,
+        fileName: fileName,
+        fileBytes: fileBytes,
+      );
+    });
+  }
+
+  Future<String?> autologinUrl() {
+    return _guard(() async {
+      final String token = await _requireToken();
+      final SdoProfile profile = await _profile(token);
+      return _source.autologinUrl(token, userId: profile.userId);
     });
   }
 
@@ -94,8 +162,6 @@ class SdoRepository {
     return profile;
   }
 
-  /// Пока токен недействителен, чистим хранилище, чтобы приложение
-  /// вернулось на экран входа, а не зациклилось на ошибках.
   Future<T> _guard<T>(Future<T> Function() action) async {
     try {
       return await action();

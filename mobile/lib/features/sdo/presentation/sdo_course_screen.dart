@@ -5,10 +5,12 @@ import '../../../core/widgets/error_view.dart';
 import '../../../core/widgets/skeleton.dart';
 import '../data/sdo_exception.dart';
 import '../data/sdo_models.dart';
+import 'sdo_assignments_tab.dart';
 import 'sdo_providers.dart';
+import 'sdo_quizzes_tab.dart';
 import '../sdo_screen.dart';
 
-/// Экран курса: разделы и элементы (материалы) плюс журнал оценок.
+/// Экран курса: материалы, задания, тесты.
 class SdoCourseScreen extends ConsumerWidget {
   const SdoCourseScreen({super.key, required this.course});
 
@@ -17,21 +19,23 @@ class SdoCourseScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: Text(course.title, maxLines: 1, overflow: TextOverflow.ellipsis),
           bottom: const TabBar(
             tabs: <Widget>[
               Tab(text: 'Материалы'),
-              Tab(text: 'Оценки'),
+              Tab(text: 'Задания'),
+              Tab(text: 'Тесты'),
             ],
           ),
         ),
         body: TabBarView(
           children: <Widget>[
             _ContentsTab(courseId: course.id),
-            _GradesTab(courseId: course.id),
+            SdoAssignmentsTab(courseId: course.id),
+            SdoQuizzesTab(courseId: course.id),
           ],
         ),
       ),
@@ -116,7 +120,7 @@ class _SectionCard extends StatelessWidget {
   }
 }
 
-class _ModuleTile extends StatelessWidget {
+class _ModuleTile extends ConsumerWidget {
   const _ModuleTile({required this.module});
 
   final SdoModule module;
@@ -126,9 +130,9 @@ class _ModuleTile extends StatelessWidget {
       'assign' => Icons.assignment_outlined,
       'quiz' => Icons.quiz_outlined,
       'forum' => Icons.forum_outlined,
-      'resource' || 'folder' => Icons.folder_outlined,
+      'resource' || 'folder' || 'book' => Icons.folder_outlined,
       'url' => Icons.link,
-      'page' || 'book' => Icons.article_outlined,
+      'page' => Icons.article_outlined,
       'lesson' => Icons.menu_book_outlined,
       'choice' => Icons.how_to_vote_outlined,
       'feedback' => Icons.rate_review_outlined,
@@ -140,7 +144,7 @@ class _ModuleTile extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme scheme = theme.colorScheme;
     final bool enabled = module.visible && module.url.isNotEmpty;
@@ -158,6 +162,14 @@ class _ModuleTile extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         style: theme.textTheme.bodyMedium,
       ),
+      subtitle: module.hasFiles
+          ? Text(
+              '${module.contents.where((SdoFile f) => !f.isWebLink).length} файл(ов)',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
+            )
+          : null,
       trailing: Icon(
         Icons.open_in_new_rounded,
         size: 16,
@@ -170,122 +182,6 @@ class _ModuleTile extends StatelessWidget {
               ),
             )
           : null,
-    );
-  }
-}
-
-class _GradesTab extends ConsumerWidget {
-  const _GradesTab({required this.courseId});
-
-  final int courseId;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<SdoCourseGrades> grades = ref.watch(
-      sdoCourseGradesProvider(courseId),
-    );
-
-    return grades.when(
-      loading: () => const GroupsSkeleton(),
-      error: (Object error, _) => ErrorView(
-        message: describeSdoError(error),
-        onRetry: () => ref.invalidate(sdoCourseGradesProvider(courseId)),
-      ),
-      data: (SdoCourseGrades data) {
-        final List<SdoGradeItem> graded = data.gradedItems;
-        return RefreshIndicator(
-          onRefresh: () async =>
-              ref.refresh(sdoCourseGradesProvider(courseId).future),
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-            children: <Widget>[
-              if (data.courseGradeFormatted.isNotEmpty)
-                _CourseTotalCard(total: data.courseGradeFormatted),
-              if (graded.isEmpty)
-                const _EmptyGrades()
-              else
-                for (final SdoGradeItem item in graded)
-                  _GradeRow(item: item),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _CourseTotalCard extends StatelessWidget {
-  const _CourseTotalCard({required this.total});
-
-  final String total;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme scheme = theme.colorScheme;
-    return Card(
-      margin: const EdgeInsets.only(bottom: 14),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: <Widget>[
-            Icon(Icons.emoji_events_outlined, color: scheme.primary),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                'Итог по курсу',
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            Text(
-              total,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: scheme.primary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _GradeRow extends StatelessWidget {
-  const _GradeRow({required this.item});
-
-  final SdoGradeItem item;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final ColorScheme scheme = theme.colorScheme;
-
-    return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: ListTile(
-        title: Text(
-          item.name.isEmpty ? (item.moduleName.isEmpty ? 'Оценка' : item.moduleName) : item.name,
-          style: theme.textTheme.bodyMedium,
-        ),
-        subtitle: item.moduleName.isEmpty
-            ? null
-            : Text(
-                item.moduleName,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: scheme.onSurfaceVariant,
-                ),
-              ),
-        trailing: Text(
-          item.gradeFormatted,
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w700,
-            color: scheme.primary,
-          ),
-        ),
-      ),
     );
   }
 }
@@ -322,29 +218,6 @@ class _EmptyContents extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _EmptyGrades extends StatelessWidget {
-  const _EmptyGrades();
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        children: <Widget>[
-          Icon(
-            Icons.grading_outlined,
-            size: 48,
-            color: theme.colorScheme.outline,
-          ),
-          const SizedBox(height: 12),
-          Text('Оценок пока нет', style: theme.textTheme.titleMedium),
-        ],
       ),
     );
   }
