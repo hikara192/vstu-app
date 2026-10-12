@@ -1,4 +1,10 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'schedule_models.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
 
 _Teacher _$TeacherFromJson(Map<String, dynamic> json) => _Teacher(
   id: (json['id'] as num?)?.toInt(),

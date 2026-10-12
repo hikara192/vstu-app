@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:url_launcher_platform_interface/link.dart';
 import 'package:url_launcher_platform_interface/url_launcher_platform_interface.dart';
 import 'package:vstu_app/core/widgets/sdo_button.dart';
+import 'package:vstu_app/features/sdo/data/sdo_token_store.dart';
+import 'package:vstu_app/features/sdo/presentation/sdo_home_screen.dart';
+import 'package:vstu_app/features/sdo/presentation/sdo_providers.dart';
 import 'package:vstu_app/features/sdo/sdo_screen.dart';
 
 class _RecordingUrlLauncherPlatform extends UrlLauncherPlatform {
@@ -36,22 +40,24 @@ void main() {
     UrlLauncherPlatform.instance = originalUrlLauncher;
   });
 
-  testWidgets('SdoButton opens the SDO inside the app, not externally', (
+  testWidgets('SdoButton opens the native SDO screen, not the browser', (
     tester,
   ) async {
     await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: SdoButton(webViewBody: _fakeWebViewBody),
-        ),
+      ProviderScope(
+        overrides: [
+          sdoTokenStoreProvider.overrideWithValue(InMemorySdoTokenStore()),
+        ],
+        child: const MaterialApp(home: Scaffold(body: SdoButton())),
       ),
     );
 
     await tester.tap(find.byType(IconButton));
     await tester.pumpAndSettle();
 
-    expect(find.byType(SdoScreen), findsOneWidget);
+    expect(find.byType(SdoHomeScreen), findsOneWidget);
     expect(find.text('СДО ВГТУ'), findsOneWidget);
+    expect(find.text('Вход в СДО ВГТУ'), findsOneWidget);
     expect(urlLauncher.launchedUrls, isEmpty);
   });
 
@@ -82,5 +88,25 @@ void main() {
     await tester.pump();
 
     expect(urlLauncher.launchedUrls, <String>['https://sdo.vstu.by']);
+  });
+
+  testWidgets('SdoScreen opens the provided module URL externally', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SdoScreen(
+          bodyBuilder: _fakeWebViewBody,
+          initialUrl: 'https://sdo.vstu.by/mod/assign/view.php?id=42',
+        ),
+      ),
+    );
+
+    await tester.tap(find.byIcon(Icons.open_in_browser));
+    await tester.pump();
+
+    expect(urlLauncher.launchedUrls, <String>[
+      'https://sdo.vstu.by/mod/assign/view.php?id=42',
+    ]);
   });
 }

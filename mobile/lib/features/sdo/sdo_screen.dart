@@ -10,11 +10,17 @@ import 'sdo_session_store.dart';
 /// Полноэкранный «мини-браузер» СДО ВГТУ: сайт открывается внутри приложения,
 /// а не во внешнем браузере.
 class SdoScreen extends StatefulWidget {
-  const SdoScreen({super.key, this.bodyBuilder});
+  const SdoScreen({super.key, this.bodyBuilder, this.initialUrl});
 
   /// Заменяет WebView в widget-тестах: платформенная часть webview_flutter
   /// недоступна во flutter_test, поэтому тесты подставляют пустышку.
   final WidgetBuilder? bodyBuilder;
+
+  /// Адрес, который открывается первым. По умолчанию — главная СДО.
+  /// Позволяет открыть конкретный элемент курса (задание, тест, файл).
+  final String? initialUrl;
+
+  String get _startUrl => initialUrl ?? AppConfig.sdoUrl;
 
   @override
   State<SdoScreen> createState() => _SdoScreenState();
@@ -75,7 +81,7 @@ class _SdoScreenState extends State<SdoScreen> {
     } on Object {
       // Сессию восстановить не удалось — пользователь просто войдёт заново.
     }
-    unawaited(_controller?.loadRequest(Uri.parse(AppConfig.sdoUrl)));
+    unawaited(_controller?.loadRequest(Uri.parse(widget._startUrl)));
   }
 
   /// Снимает текущие куки с WebView и сохраняет их, чтобы авторизация
@@ -132,8 +138,9 @@ class _SdoScreenState extends State<SdoScreen> {
   }
 
   Future<void> _openExternally() async {
+    final String? current = await _controller?.currentUrl();
     final bool launched = await launchUrl(
-      Uri.parse(AppConfig.sdoUrl),
+      Uri.parse(current ?? widget._startUrl),
       mode: LaunchMode.externalApplication,
     );
     if (!launched && mounted) {

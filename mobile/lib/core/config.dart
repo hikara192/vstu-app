@@ -4,6 +4,17 @@ class AppConfig {
   /// Адрес системы дистанционного обучения (СДО) ВГТУ.
   static const String sdoUrl = 'https://sdo.vstu.by';
 
+  /// Имя веб-сервиса Moodle, через который приложение работает с СДО.
+  /// В настройках СДО должен быть включён мобильный сервис
+  /// (`moodle_mobile_app`).
+  static const String sdoWebService = 'moodle_mobile_app';
+
+  /// Эндпоинт выдачи токена по логину и паролю (`/login/token.php`).
+  static const String sdoTokenPath = '/login/token.php';
+
+  /// REST-эндпоинт веб-сервисов Moodle (`/webservice/rest/server.php`).
+  static const String sdoRestPath = '/webservice/rest/server.php';
+
   static const String apiBaseUrl = String.fromEnvironment(
     'UNI_API_BASE_URL',
     defaultValue: 'https://schedule.vstu.by/api/v1',

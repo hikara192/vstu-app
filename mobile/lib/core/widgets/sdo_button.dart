@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
 
-import '../../features/sdo/sdo_screen.dart';
+import '../../features/sdo/presentation/sdo_home_screen.dart';
 
-/// Открывает СДО внутри приложения (полноэкранный WebView), а не во внешнем
-/// браузере. [webViewBody] — шов для тестов: подменяет настоящий WebView.
-void openSdo(BuildContext context, {WidgetBuilder? webViewBody}) {
+/// Открывает раздел СДО внутри приложения. Данные СДО (курсы, дедлайны,
+/// оценки) показываются нативными экранами; веб-версия доступна отдельно,
+/// как запасной вариант.
+void openSdo(BuildContext context) {
   Navigator.of(context).push(
-    MaterialPageRoute<void>(
-      builder: (_) => SdoScreen(bodyBuilder: webViewBody),
-    ),
+    MaterialPageRoute<void>(builder: (_) => const SdoHomeScreen()),
   );
 }
 
 class SdoButton extends StatelessWidget {
-  const SdoButton({super.key, this.webViewBody});
-
-  final WidgetBuilder? webViewBody;
+  const SdoButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       tooltip: 'СДО ВГТУ',
       icon: const Icon(Icons.school_outlined),
-      onPressed: () => openSdo(context, webViewBody: webViewBody),
+      onPressed: () => openSdo(context),
     );
   }
 }
