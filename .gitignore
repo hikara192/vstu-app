@@ -6,7 +6,9 @@ mobile/.packages
 
 # IDE
 .vscode/
-.idea/
+.idea/*
+!.idea/runConfigurations/
+!.idea/runConfigurations/*
 *.iml
 
 # Android release signing

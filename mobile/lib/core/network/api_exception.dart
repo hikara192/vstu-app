@@ -17,3 +17,11 @@ const ApiException groupNotFoundException = ApiException(
   code: 'group_not_found',
   statusCode: 404,
 );
+
+/// Группа существует, но занятий для неё нет: API вернул пустой список
+/// (каникулы, сессия или расписание ещё не опубликовано). Это не то же
+/// самое, что отсутствующая группа, и не должно показывать «группы нет».
+const ApiException emptyScheduleException = ApiException(
+  'Для этой группы расписание пока не опубликовано',
+  code: 'schedule_empty',
+);

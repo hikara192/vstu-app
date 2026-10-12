@@ -69,7 +69,7 @@ GroupSchedule groupScheduleFromUni(
   }
 
   if (lessons.isEmpty) {
-    throw groupNotFoundException;
+    throw emptyScheduleException;
   }
 
   return GroupSchedule(
