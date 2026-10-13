@@ -13,6 +13,24 @@ class GradientHeaderSurface extends StatelessWidget {
   /// Создаёт подложку шапки вокруг произвольного содержимого.
   const GradientHeaderSurface({super.key, required this.child});
 
+  /// Радиус нижних углов подложки.
+  static const BorderRadius bottomRadius = BorderRadius.vertical(
+    bottom: Radius.circular(26),
+  );
+
+  /// Тень подложки: шапка читается приподнятой над содержанием.
+  ///
+  /// Ею же рисуется проекция поверх содержания (`_HeaderShadow` в оболочке):
+  /// подложка стоит в разметке выше страниц, поэтому её собственной тени
+  /// страницы не видно.
+  static List<BoxShadow> shadowOf(AppColors colors) => <BoxShadow>[
+    BoxShadow(
+      color: colors.heroGradient.last.withValues(alpha: 0.25),
+      blurRadius: 20,
+      offset: const Offset(0, 8),
+    ),
+  ];
+
   /// Содержимое, которое рисуется поверх градиента.
   final Widget child;
 
@@ -32,16 +50,8 @@ class GradientHeaderSurface extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: const BorderRadius.vertical(
-            bottom: Radius.circular(26),
-          ),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: colors.heroGradient.last.withValues(alpha: 0.25),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-          ],
+          borderRadius: bottomRadius,
+          boxShadow: shadowOf(colors),
         ),
         child: IconTheme.merge(
           data: const IconThemeData(color: Colors.white),

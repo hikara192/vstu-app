@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/widgets/gradient_header.dart';
 import '../features/groups/presentation/groups_header.dart';
 import '../features/schedule/presentation/schedule_header.dart';
+import 'app_colors.dart';
 
 /// Постоянная оболочка приложения: шапка, которая не двигается при переходах.
 ///
@@ -49,11 +51,78 @@ class AppShell extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(child: child),
+          Expanded(
+            child: Stack(children: <Widget>[child, const _HeaderShadow()]),
+          ),
         ],
       ),
     );
   }
+}
+
+/// Тень шапки, нарисованная поверх содержания.
+///
+/// Подложка шапки стоит в разметке выше страниц, поэтому её собственная тень
+/// уходит под них — а страницы непрозрачны, и тень пропадала бы совсем. Здесь
+/// та же тень рисуется ещё раз, слоем выше содержания.
+class _HeaderShadow extends StatelessWidget {
+  const _HeaderShadow();
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+      child: IgnorePointer(
+        child: CustomPaint(
+          painter: _HeaderShadowPainter(
+            GradientHeaderSurface.shadowOf(AppColors.of(context)),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Рисует тень шапки над верхом области содержания.
+///
+/// Источник тени — прямоугольник во всю ширину области, нижняя кромка которого
+/// совпадает с низом шапки (он же верх области содержания): тень ложится ровно
+/// под шапку и едет вместе с её меняющейся высотой. Вверх источник уходит
+/// заведомо выше, чем достаёт размытие, поэтому его верхняя кромка в кадр не
+/// попадает; вниз тень обрезается по области содержания.
+///
+/// Тень рисуется сама, а не через `BoxDecoration`: штатные тени платформа в
+/// тестах гасит — рисует жёсткими и обрезает по источнику, — и по картинке
+/// нельзя было бы убедиться, что тень вообще есть. Геометрия и краска взяты у
+/// платформы: тот же [BoxShadow.toPaint] по той же геометрии.
+class _HeaderShadowPainter extends CustomPainter {
+  const _HeaderShadowPainter(this.shadows);
+
+  final List<BoxShadow> shadows;
+
+  /// Насколько высоко уходит источник тени.
+  ///
+  /// Много больше радиуса размытия (20), чтобы верхняя кромка источника не
+  /// подсвечивала тень у нижней.
+  static const double _sourceHeight = 120;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.clipRect(Offset.zero & size);
+    final Rect source = Rect.fromLTRB(0, -_sourceHeight, size.width, 0);
+    for (final BoxShadow shadow in shadows) {
+      final Rect bounds = source
+          .shift(shadow.offset)
+          .inflate(shadow.spreadRadius);
+      canvas.drawRRect(
+        GradientHeaderSurface.bottomRadius.toRRect(bounds),
+        shadow.toPaint(),
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(_HeaderShadowPainter oldDelegate) =>
+      !listEquals(oldDelegate.shadows, shadows);
 }
 
 /// Кладёт уходящую и входящую шапки стопкой сверху.

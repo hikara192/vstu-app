@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:vstu_app/app/app.dart';
 import 'package:vstu_app/app/app_shell.dart';
 import 'package:vstu_app/app/page_surface.dart';
 import 'package:vstu_app/core/config.dart';
@@ -16,6 +19,32 @@ import 'package:vstu_app/features/schedule/presentation/schedule_screen.dart';
 import 'package:vstu_app/features/settings/presentation/settings_screen.dart';
 
 import '../support/app_harness.dart';
+
+/// Яркость пикселя нарисованного кадра в логической точке `point`.
+///
+/// Нужна там, где обещает не дерево виджетов, а сама картинка: тень шапки —
+/// это рисование, а не структура.
+Future<double> lumaAt(WidgetTester tester, Offset point) async {
+  final double appWidth = tester.getSize(find.byType(VstuApp)).width;
+  double luma = 0;
+  await tester.runAsync(() async {
+    final ui.Image image = await captureImage(
+      tester.element(find.byType(VstuApp)),
+    );
+    final ByteData? pixels = await image.toByteData(
+      format: ui.ImageByteFormat.rawRgba,
+    );
+    final double scale = image.width / appWidth;
+    final int x = (point.dx * scale).round();
+    final int y = (point.dy * scale).round();
+    final int i = (y * image.width + x) * 4;
+    luma =
+        0.299 * pixels!.getUint8(i) +
+        0.587 * pixels.getUint8(i + 1) +
+        0.114 * pixels.getUint8(i + 2);
+  });
+  return luma;
+}
 
 void main() {
   testWidgets('шапка стоит на месте, а содержание едет', (
@@ -146,6 +175,35 @@ void main() {
       ),
       findsOneWidget,
       reason: 'расписание тоже обязано закрывать собой список групп',
+    );
+  });
+
+  testWidgets('тень шапки читается поверх содержания', (
+    WidgetTester tester,
+  ) async {
+    await pumpApp(tester);
+
+    final double headerBottom = tester
+        .getBottomLeft(find.byType(GradientHeaderSurface))
+        .dy;
+    final double centerX = tester.getSize(find.byType(VstuApp)).width / 2;
+    // Обе точки — на фоне страницы и по её середине: в углах тень скруглена,
+    // там её почти нет. Разница между точками — только сама тень.
+    final double inShadow = await lumaAt(
+      tester,
+      Offset(centerX, headerBottom + 3),
+    );
+    final double belowShadow = await lumaAt(
+      tester,
+      Offset(centerX, headerBottom + 120),
+    );
+
+    expect(
+      inShadow,
+      lessThan(belowShadow - 4),
+      reason:
+          'шапка приподнята над содержанием: её тень обязана ложиться '
+          'поверх страницы, а не пропадать под ней',
     );
   });
 
