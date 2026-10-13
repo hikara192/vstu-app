@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vstu_app/app/app.dart';
 import 'package:vstu_app/app/router.dart';
+import 'package:vstu_app/app/shared_axis_page_transitions.dart';
 import 'package:vstu_app/app/theme.dart';
 import 'package:vstu_app/core/providers.dart';
 import 'package:vstu_app/features/settings/data/settings_controller.dart';
@@ -26,12 +27,12 @@ GoRouter _probeRouter() => GoRouter(
 );
 
 void main() {
-  test('на Android переходами экранов управляет fade-forwards', () {
+  test('на Android переходами экранов управляет shared-axis X', () {
     final ThemeData theme = AppTheme.light(_defaultSeed);
 
     final builder = theme.pageTransitionsTheme.builders[TargetPlatform.android];
 
-    expect(builder, isA<FadeForwardsPageTransitionsBuilder>());
+    expect(builder, isA<SharedAxisPageTransitionsBuilder>());
   });
 
   testWidgets(

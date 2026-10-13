@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,6 +9,21 @@ import '../features/settings/data/settings_controller.dart';
 import '../features/settings/domain/app_settings.dart';
 import '../features/settings/presentation/settings_screen.dart';
 
+/// Строит `MaterialPage` для маршрута.
+///
+/// GoRouter 18 сам решает, какую страницу отдать маршруту с `builder:`, и
+/// определяет тип приложения по тому, есть ли над ним `MaterialApp` из
+/// `package:material_ui` (Material вынесли из SDK в отдельный пакет). Наше
+/// приложение собрано на `package:flutter/material.dart`, поэтому проверка не
+/// срабатывает и GoRouter молча отдаёт `NoTransitionPage` — с нулевой
+/// длительностью и пустым `transitionsBuilder`. Переходы экранов при этом
+/// исчезают целиком: `pageTransitionsTheme` вообще не спрашивают.
+///
+/// Явный `MaterialPage` возвращает обычный маршрут Material, и переход снова
+/// берётся из темы.
+Page<Object?> _materialPage(GoRouterState state, Widget child) =>
+    MaterialPage<void>(key: state.pageKey, name: state.name, child: child);
+
 final routerProvider = Provider<GoRouter>(
   (ref) => GoRouter(
     initialLocation: _initialLocation(ref),
@@ -15,23 +31,25 @@ final routerProvider = Provider<GoRouter>(
       GoRoute(
         path: GroupsScreen.routePath,
         name: GroupsScreen.routeName,
-        builder: (context, state) => const GroupsScreen(),
+        pageBuilder: (context, state) =>
+            _materialPage(state, const GroupsScreen()),
       ),
       GoRoute(
         path: '/schedule/:groupId',
         name: ScheduleScreen.routeName,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final groupId = int.tryParse(state.pathParameters['groupId'] ?? '');
           if (groupId == null) {
-            return const GroupsScreen();
+            return _materialPage(state, const GroupsScreen());
           }
-          return ScheduleScreen(groupId: groupId);
+          return _materialPage(state, ScheduleScreen(groupId: groupId));
         },
       ),
       GoRoute(
         path: SettingsScreen.routePath,
         name: SettingsScreen.routeName,
-        builder: (context, state) => const SettingsScreen(),
+        pageBuilder: (context, state) =>
+            _materialPage(state, const SettingsScreen()),
       ),
     ],
   ),
