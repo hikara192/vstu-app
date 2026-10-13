@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
-import 'shared_axis_page_transitions.dart';
+import 'parallax_page_transitions.dart';
 
 class AppTheme {
   const AppTheme._();
@@ -136,7 +136,7 @@ class AppTheme {
       ),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: <TargetPlatform, PageTransitionsBuilder>{
-          TargetPlatform.android: SharedAxisPageTransitionsBuilder(),
+          TargetPlatform.android: ParallaxPageTransitionsBuilder(),
         },
       ),
     );

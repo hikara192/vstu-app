@@ -41,6 +41,15 @@ final scheduleBuilderProvider = FutureProvider.family<ScheduleBuilder, int>((
   );
 });
 
+/// Переспрашивает расписание семестра и молча ждёт ответа: если запрос не
+/// удался, ошибку показывает тот, кто читает [semesterScheduleProvider].
+Future<void> refreshSemesterSchedule(WidgetRef ref, int groupId) async {
+  ref.invalidate(semesterScheduleProvider(groupId));
+  try {
+    await ref.read(semesterScheduleProvider(groupId).future);
+  } catch (_) {}
+}
+
 class WeekOffsetNotifier extends Notifier<int> {
   @override
   int build() => 0;

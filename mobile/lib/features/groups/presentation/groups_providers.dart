@@ -39,6 +39,69 @@ final groupsQueryProvider = NotifierProvider<GroupsQuery, String>(
   GroupsQuery.new,
 );
 
+/// Что открыто в списке групп: факультет и курс внутри него.
+///
+/// Держится в провайдере, а не в состоянии экрана: шапка стала частью оболочки,
+/// содержимое экрана пересоздаётся при переходах, а место в списке должно
+/// пережить возврат из расписания.
+class GroupsBrowseState {
+  const GroupsBrowseState({this.faculty, this.course});
+
+  final String? faculty;
+
+  final int? course;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GroupsBrowseState &&
+          other.faculty == faculty &&
+          other.course == course;
+
+  @override
+  int get hashCode => Object.hash(faculty, course);
+}
+
+/// Уровни обзора групп: сверху факультеты, внутри факультета курсы.
+class GroupsBrowse extends Notifier<GroupsBrowseState> {
+  @override
+  GroupsBrowseState build() => const GroupsBrowseState();
+
+  /// Открывает факультет. Курс сбрасывается: на новом факультете его ещё нет.
+  void selectFaculty(String name) {
+    if (state.faculty != name || state.course != null) {
+      state = GroupsBrowseState(faculty: name);
+    }
+  }
+
+  /// Открывает курс внутри выбранного факультета.
+  void selectCourse(int course) {
+    if (state.course != course) {
+      state = GroupsBrowseState(faculty: state.faculty, course: course);
+    }
+  }
+
+  /// Шаг назад по иерархии: сначала снимает курс, затем факультет.
+  void up() {
+    if (state.course != null) {
+      state = GroupsBrowseState(faculty: state.faculty);
+    } else if (state.faculty != null) {
+      state = const GroupsBrowseState();
+    }
+  }
+
+  /// Возвращает список групп к самому верхнему уровню.
+  void reset() {
+    if (state.faculty != null || state.course != null) {
+      state = const GroupsBrowseState();
+    }
+  }
+}
+
+final groupsBrowseProvider = NotifierProvider<GroupsBrowse, GroupsBrowseState>(
+  GroupsBrowse.new,
+);
+
 final groupsProvider = FutureProvider<List<Group>>(
   (ref) => ref
       .watch(groupsRepositoryProvider)

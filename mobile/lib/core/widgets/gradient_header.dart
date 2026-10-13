@@ -3,25 +3,18 @@ import 'package:flutter/services.dart';
 
 import '../../app/app_colors.dart';
 
-class GradientHeader extends StatelessWidget {
-  const GradientHeader({
-    super.key,
-    required this.title,
-    this.subtitle,
-    this.leading,
-    this.actions = const <Widget>[],
-    this.child,
-  });
+/// Градиентная подложка шапки: системный вырез, градиент, тень и белые иконки.
+///
+/// Здесь всё, что не меняется при переходе между экранами. В оболочке
+/// приложения (`AppShell`) подложка живёт вне анимируемого маршрута, поэтому
+/// при навигации она остаётся на месте, а меняющееся содержимое приходит в
+/// `child`.
+class GradientHeaderSurface extends StatelessWidget {
+  /// Создаёт подложку шапки вокруг произвольного содержимого.
+  const GradientHeaderSurface({super.key, required this.child});
 
-  final String title;
-
-  final String? subtitle;
-
-  final Widget? leading;
-
-  final List<Widget> actions;
-
-  final Widget? child;
+  /// Содержимое, которое рисуется поверх градиента.
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -52,55 +45,125 @@ class GradientHeader extends StatelessWidget {
         ),
         child: IconTheme.merge(
           data: const IconThemeData(color: Colors.white),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+/// Содержимое шапки: строка с заголовком, подзаголовком и действиями.
+///
+/// Отделено от подложки, чтобы оболочка могла подменять только содержимое —
+/// заголовок экрана и его действия — и при этом ничего не двигать.
+class GradientHeaderContent extends StatelessWidget {
+  /// Создаёт содержимое шапки.
+  const GradientHeaderContent({
+    super.key,
+    required this.title,
+    this.subtitle,
+    this.leading,
+    this.actions = const <Widget>[],
+    this.child,
+  });
+
+  final String title;
+
+  final String? subtitle;
+
+  final Widget? leading;
+
+  final List<Widget> actions;
+
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            if (leading != null) ...<Widget>[
+              leading!,
+              const SizedBox(width: 4),
+            ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  if (leading != null) ...<Widget>[
-                    leading!,
-                    const SizedBox(width: 4),
-                  ],
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 21,
-                            fontWeight: FontWeight.w700,
-                            height: 1.2,
-                          ),
-                        ),
-                        if (subtitle != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 3),
-                            child: Text(
-                              subtitle!,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.82),
-                                fontSize: 13.5,
-                                height: 1.2,
-                              ),
-                            ),
-                          ),
-                      ],
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 21,
+                      fontWeight: FontWeight.w700,
+                      height: 1.2,
                     ),
                   ),
-                  ...actions,
+                  if (subtitle != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 3),
+                      child: Text(
+                        subtitle!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.82),
+                          fontSize: 13.5,
+                          height: 1.2,
+                        ),
+                      ),
+                    ),
                 ],
               ),
-              if (child != null)
-                Padding(padding: const EdgeInsets.only(top: 16), child: child),
-            ],
-          ),
+            ),
+            ...actions,
+          ],
         ),
+        if (child != null)
+          Padding(padding: const EdgeInsets.only(top: 16), child: child),
+      ],
+    );
+  }
+}
+
+/// Шапка экрана: подложка и содержимое в одном виджете.
+///
+/// Для экранов, которые сами владеют своей шапкой (настройки, СДО), и для мест,
+/// где шапка нужна целиком. Оболочка приложения собирает эти две части
+/// отдельно, чтобы подложка не двигалась при переходах.
+class GradientHeader extends StatelessWidget {
+  const GradientHeader({
+    super.key,
+    required this.title,
+    this.subtitle,
+    this.leading,
+    this.actions = const <Widget>[],
+    this.child,
+  });
+
+  final String title;
+
+  final String? subtitle;
+
+  final Widget? leading;
+
+  final List<Widget> actions;
+
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    return GradientHeaderSurface(
+      child: GradientHeaderContent(
+        title: title,
+        subtitle: subtitle,
+        leading: leading,
+        actions: actions,
+        child: child,
       ),
     );
   }

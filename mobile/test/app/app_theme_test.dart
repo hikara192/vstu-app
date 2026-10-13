@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vstu_app/app/app.dart';
 import 'package:vstu_app/app/router.dart';
-import 'package:vstu_app/app/shared_axis_page_transitions.dart';
+import 'package:vstu_app/app/parallax_page_transitions.dart';
 import 'package:vstu_app/app/theme.dart';
 import 'package:vstu_app/core/providers.dart';
 import 'package:vstu_app/features/settings/data/settings_controller.dart';
@@ -27,12 +27,12 @@ GoRouter _probeRouter() => GoRouter(
 );
 
 void main() {
-  test('на Android переходами экранов управляет shared-axis X', () {
+  test('на Android переходами экранов управляет параллакс-сдвиг', () {
     final ThemeData theme = AppTheme.light(_defaultSeed);
 
     final builder = theme.pageTransitionsTheme.builders[TargetPlatform.android];
 
-    expect(builder, isA<SharedAxisPageTransitionsBuilder>());
+    expect(builder, isA<ParallaxPageTransitionsBuilder>());
   });
 
   testWidgets(
