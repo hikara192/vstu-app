@@ -7,8 +7,7 @@ import '../../../core/utils/room.dart';
 import '../data/schedule_models.dart';
 import '../domain/schedule_builder.dart';
 import 'lesson_parts.dart';
-import 'lesson_pause.dart';
-import 'lesson_progress.dart';
+import 'lesson_timeline.dart';
 
 class LessonGroupCard extends ConsumerWidget {
   const LessonGroupCard({super.key, required this.slot, required this.date});
@@ -110,13 +109,11 @@ class LessonGroupCard extends ConsumerWidget {
                             showParity: showParityInRow,
                           ),
 
-                        LessonPause(
+                        LessonTimeline(
                           lesson: lesson,
                           date: date,
                           color: typeColor,
                         ),
-                        if (isOngoing)
-                          LessonProgress(lesson: lesson, date: date),
                       ],
                     ),
                   ),

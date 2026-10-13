@@ -7,7 +7,7 @@ enum AppThemeMode {
 
   dark('Тёмная', 'Серые поверхности, как в обычной тёмной теме'),
 
-  amoled('AMOLED (чёрный)', 'Совсем чёрный фон, экономит батарею');
+  amoled('AMOLED', 'Чистый чёрный');
 
   const AppThemeMode(this.title, [this.description = '']);
 
