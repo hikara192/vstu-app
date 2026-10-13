@@ -1,152 +1,223 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/widgets/gradient_header.dart';
+import '../../../core/widgets/theme_reveal.dart';
 import '../../groups/presentation/groups_providers.dart';
 import '../../notifications/presentation/notification_providers.dart';
 import '../../schedule/presentation/schedule_providers.dart';
 import '../data/settings_controller.dart';
 import '../domain/app_settings.dart';
 
-class SettingsScreen extends ConsumerWidget {
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
   static const String routeName = 'settings';
   static const String routePath = '/settings';
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  /// Управляет круговым раскрытием нового оформления.
+  final GlobalKey<ThemeRevealAreaState> _revealKey =
+      GlobalKey<ThemeRevealAreaState>();
+
+  /// Точка последнего касания в пределах секций «Тема» / «Акцентный цвет» —
+  /// из неё раскрывается круг.
+  Offset? _lastTapDown;
+
+  /// Меняет тему/акцент с круговым раскрытием из точки касания. Если точка
+  /// неизвестна — раскрытие идёт из центра экрана.
+  Future<void> _runRevealed(Future<void> Function() commit) async {
+    final ThemeRevealAreaState? reveal = _revealKey.currentState;
+    if (reveal == null) {
+      await commit();
+      return;
+    }
+    final Offset point =
+        _lastTapDown ?? MediaQuery.sizeOf(context).center(Offset.zero);
+    await reveal.revealFrom(point, commit);
+  }
+
+  Future<void> _changeThemeMode(AppThemeMode mode) async {
+    final AppSettings settings = ref.read(appSettingsProvider);
+    final Brightness platform = MediaQuery.platformBrightnessOf(context);
+    // Если новый режим рисует ту же самую картинку, что и текущий (например,
+    // «Тёмная» → «Системная», когда системная тема тёмная, или повторное
+    // нажатие уже активного режима) — анимация не нужна: визуально ничего не
+    // меняется. Сам выбор сохраняем, но без раскрытия.
+    if (effectiveAppearanceFor(settings.themeMode, platform) ==
+        effectiveAppearanceFor(mode, platform)) {
+      if (settings.themeMode != mode) {
+        await ref.read(appSettingsProvider.notifier).setThemeMode(mode);
+      }
+      return;
+    }
+    await _runRevealed(
+      () => ref.read(appSettingsProvider.notifier).setThemeMode(mode),
+    );
+  }
+
+  Future<void> _changeAccent(AccentColor accent) async {
+    // Тот же цвет — ничего не меняем, анимация не нужна.
+    if (accent == ref.read(appSettingsProvider).accent) return;
+    await _runRevealed(
+      () => ref.read(appSettingsProvider.notifier).setAccent(accent),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final settings = ref.watch(appSettingsProvider);
     final selectedGroup = ref.watch(selectedGroupProvider);
     final controller = ref.read(appSettingsProvider.notifier);
 
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          GradientHeader(
-            leading: IconButton(
-              tooltip: 'Назад',
-              icon: const Icon(Icons.arrow_back_rounded),
-              onPressed: () => context.pop(),
-            ),
-            title: 'Настройки',
-            subtitle: 'Оформление и запуск приложения',
-          ),
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.fromLTRB(
-                16,
-                16,
-                16,
-                16 + MediaQuery.paddingOf(context).bottom,
+    return ThemeRevealArea(
+      key: _revealKey,
+      child: Scaffold(
+        body: Column(
+          children: <Widget>[
+            GradientHeader(
+              leading: IconButton(
+                tooltip: 'Назад',
+                icon: const Icon(Icons.arrow_back_rounded),
+                onPressed: () => context.pop(),
               ),
-              children: <Widget>[
-                const _SectionTitle('Внешний вид'),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
+              title: 'Настройки',
+              subtitle: 'Оформление и запуск приложения',
+            ),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.fromLTRB(
+                  16,
+                  16,
+                  16,
+                  16 + MediaQuery.paddingOf(context).bottom,
+                ),
+                children: <Widget>[
+                  const _SectionTitle('Внешний вид'),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Column(
+                        children: <Widget>[
+                          _ChoiceRow(
+                            title: 'Тема',
+                            subtitle: settings.themeMode.title,
+                            child: Listener(
+                              onPointerDown: (event) =>
+                                  _lastTapDown = event.position,
+                              child: Column(
+                                children: <Widget>[
+                                  for (final mode in AppThemeMode.values)
+                                    _ChoiceRow(
+                                      title: mode.title,
+                                      subtitle: mode.description,
+                                      selected: mode == settings.themeMode,
+                                      compact: true,
+                                      onTap: () =>
+                                          unawaited(_changeThemeMode(mode)),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const Divider(height: 1, indent: 16, endIndent: 16),
+                          _ChoiceRow(
+                            title: 'Акцентный цвет',
+                            subtitle: settings.accent.title,
+                            child: Listener(
+                              onPointerDown: (event) =>
+                                  _lastTapDown = event.position,
+                              child: _AccentPicker(
+                                selected: settings.accent,
+                                onSelect: (accent) =>
+                                    unawaited(_changeAccent(accent)),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const _SectionTitle('Запуск'),
+                  Card(
                     child: Column(
                       children: <Widget>[
                         _ChoiceRow(
-                          title: 'Тема',
-                          subtitle: settings.themeMode.title,
+                          title: 'Стартовый экран',
+                          subtitle: settings.startScreen.title,
                           child: Column(
                             children: <Widget>[
-                              for (final mode in AppThemeMode.values)
+                              for (final screen in StartScreen.values)
                                 _ChoiceRow(
-                                  title: mode.title,
-                                  subtitle: mode.description,
-                                  selected: mode == settings.themeMode,
+                                  title: screen.title,
+                                  subtitle: screen.description,
+                                  selected: screen == settings.startScreen,
                                   compact: true,
-                                  onTap: () => controller.setThemeMode(mode),
+                                  onTap: () =>
+                                      controller.setStartScreen(screen),
                                 ),
                             ],
-                          ),
-                        ),
-                        const Divider(height: 1, indent: 16, endIndent: 16),
-                        _ChoiceRow(
-                          title: 'Акцентный цвет',
-                          subtitle: settings.accent.title,
-                          child: _AccentPicker(
-                            selected: settings.accent,
-                            onSelect: controller.setAccent,
                           ),
                         ),
                       ],
                     ),
                   ),
-                ),
-                const _SectionTitle('Запуск'),
-                Card(
-                  child: Column(
-                    children: <Widget>[
-                      _ChoiceRow(
-                        title: 'Стартовый экран',
-                        subtitle: settings.startScreen.title,
-                        child: Column(
-                          children: <Widget>[
-                            for (final screen in StartScreen.values)
-                              _ChoiceRow(
-                                title: screen.title,
-                                subtitle: screen.description,
-                                selected: screen == settings.startScreen,
-                                compact: true,
-                                onTap: () => controller.setStartScreen(screen),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const _SectionTitle('Уведомления'),
-                Card(
-                  child: Column(
-                    children: <Widget>[
-                      _SwitchRow(
-                        icon: Icons.notifications_active_outlined,
-                        title: 'Напоминать о парах',
-                        subtitle:
-                            'За 5 минут до начала пары моей группы '
-                            '(по будням и субботам).',
-                        value: settings.notificationsEnabled,
-                        onChanged: (value) =>
-                            _toggleNotifications(context, ref, value),
-                      ),
-                    ],
-                  ),
-                ),
-                const _SectionTitle('Данные'),
-                Card(
-                  child: Column(
-                    children: <Widget>[
-                      _ActionRow(
-                        icon: Icons.delete_sweep_outlined,
-                        title: 'Очистить кэш',
-                        subtitle:
-                            'Справочник групп и расписание закреплённой группы. '
-                            'Настройки и выбранная группа останутся.',
-                        onTap: () =>
-                            _clearCache(context, ref, selectedGroup?.id),
-                      ),
-                      if (selectedGroup != null) ...<Widget>[
-                        const Divider(height: 1, indent: 16, endIndent: 16),
-                        _ActionRow(
-                          icon: Icons.bookmark_remove_outlined,
-                          title: 'Забыть группу «${selectedGroup.name}»',
-                          subtitle: 'Карточка «Моя группа» исчезнет.',
-                          onTap: () =>
-                              ref.read(selectedGroupProvider.notifier).clear(),
+                  const _SectionTitle('Уведомления'),
+                  Card(
+                    child: Column(
+                      children: <Widget>[
+                        _SwitchRow(
+                          icon: Icons.notifications_active_outlined,
+                          title: 'Напоминать о парах',
+                          subtitle:
+                              'За 5 минут до начала пары моей группы '
+                              '(по будням и субботам).',
+                          value: settings.notificationsEnabled,
+                          onChanged: (value) =>
+                              _toggleNotifications(context, ref, value),
                         ),
                       ],
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                  const _SectionTitle('Данные'),
+                  Card(
+                    child: Column(
+                      children: <Widget>[
+                        _ActionRow(
+                          icon: Icons.delete_sweep_outlined,
+                          title: 'Очистить кэш',
+                          subtitle:
+                              'Справочник групп и расписание закреплённой группы. '
+                              'Настройки и выбранная группа останутся.',
+                          onTap: () =>
+                              _clearCache(context, ref, selectedGroup?.id),
+                        ),
+                        if (selectedGroup != null) ...<Widget>[
+                          const Divider(height: 1, indent: 16, endIndent: 16),
+                          _ActionRow(
+                            icon: Icons.bookmark_remove_outlined,
+                            title: 'Забыть группу «${selectedGroup.name}»',
+                            subtitle: 'Карточка «Моя группа» исчезнет.',
+                            onTap: () => ref
+                                .read(selectedGroupProvider.notifier)
+                                .clear(),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

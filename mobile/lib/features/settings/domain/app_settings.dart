@@ -24,6 +24,38 @@ enum AppThemeMode {
   bool get isAmoled => this == AppThemeMode.amoled;
 }
 
+/// Итоговый вид оформления, который на самом деле нарисует приложение
+/// в выбранном режиме. Нужен, чтобы не запускать круговую анимацию, когда
+/// внешний вид не изменится (например, «Тёмная» → «Системная» при тёмной
+/// системной теме, или повторное нажатие активного режима).
+enum ThemeAppearance {
+  /// Светлое оформление.
+  light,
+
+  /// Обычное тёмное (серые поверхности).
+  dark,
+
+  /// Полностью чёрное (AMOLED).
+  amoled,
+}
+
+/// Реальный вид темы для [mode] с учётом яркости системы [platformBrightness]:
+/// «Системная» разрешается в светлую или тёмную в зависимости от телефона.
+/// [ThemeAppearance.dark] и [ThemeAppearance.amoled] различаются намеренно —
+/// это разные палитры (серое и чисто-чёрное), хотя обе темнее светлой.
+ThemeAppearance effectiveAppearanceFor(
+  AppThemeMode mode,
+  Brightness platformBrightness,
+) => switch (mode) {
+  AppThemeMode.system =>
+    platformBrightness == Brightness.light
+        ? ThemeAppearance.light
+        : ThemeAppearance.dark,
+  AppThemeMode.light => ThemeAppearance.light,
+  AppThemeMode.dark => ThemeAppearance.dark,
+  AppThemeMode.amoled => ThemeAppearance.amoled,
+};
+
 enum AccentColor {
   vstuBlue(0xFF1B5E9C, 'Синий'),
   green(0xFF2E7D32, 'Зелёный'),

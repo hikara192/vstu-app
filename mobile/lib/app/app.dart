@@ -21,6 +21,13 @@ class VstuApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'VSTU HOME',
       debugShowCheckedModeBanner: false,
+
+      // Смена темы применяется мгновенно. Со стандартной анимацией (200 мс)
+      // MaterialApp каждый кадр подменяет ThemeData, а значит всё дерево,
+      // зависящее от Theme (в расписании это десятки тяжёлых карточек с
+      // IntrinsicHeight), перестраивается по 10+ раз за переход — отсюда
+      // просадка FPS. Без анимации дерево перестраивается один раз.
+      themeAnimationDuration: Duration.zero,
       theme: AppTheme.light(seed),
 
       darkTheme: settings.themeMode.isAmoled
