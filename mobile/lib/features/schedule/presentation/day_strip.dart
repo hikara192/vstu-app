@@ -5,6 +5,23 @@ import 'package:flutter/material.dart';
 import '../../../core/utils/plural.dart';
 import '../domain/schedule_builder.dart';
 
+/// Ширина одного чипа дня.
+const double _chipWidth = 48;
+
+/// Суммарный промежуток между чипами (по 3 с каждой стороны).
+const double _chipGap = 6;
+
+/// Шаг сетки чипов (ширина + промежуток): центры соседних чипов.
+const double _chipStep = _chipWidth + _chipGap;
+
+/// Приблизительная высота чипа до первого замера (после лаяута замер
+/// заменяется точным значением).
+const double _chipDefaultHeight = 56;
+
+/// Ключ анимированной «таблетки» активного дня — используется в тестах
+/// для проверки её положения.
+const Key dayStripPillKey = Key('day-strip-active-pill');
+
 class DayStrip extends StatefulWidget {
   const DayStrip({
     super.key,
@@ -43,10 +60,22 @@ class _DayStripState extends State<DayStrip> {
     (_) => GlobalKey(),
   );
 
+  /// Высота «таблетки»: сначала приблизительная, после первого лаяута —
+  /// точная высота чипа.
+  double _pillHeight = _chipDefaultHeight;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _revealActiveChip());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Пересчитываем высоту таблетки при первом лаяуте и при изменении
+    // масштаба текста/геометрии.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _syncPillHeight());
   }
 
   @override
@@ -96,6 +125,22 @@ class _DayStripState extends State<DayStrip> {
     );
   }
 
+  /// Сдвиг «таблетки» под чип с заданным индексом. Смещение задаётся в долях
+  /// собственной ширины таблетки ([AnimatedSlide] умножает offset на размер).
+  Offset _pillOffsetFor(int index) =>
+      Offset((index * _chipStep + _chipGap / 2) / _chipWidth, 0);
+
+  void _syncPillHeight() {
+    if (!mounted) return;
+    final box =
+        _chipKeys[widget.activeIndex].currentContext?.findRenderObject()
+            as RenderBox?;
+    if (box == null || !box.hasSize) return;
+    final height = box.size.height;
+    if ((height - _pillHeight).abs() < 0.5) return;
+    setState(() => _pillHeight = height);
+  }
+
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
@@ -115,23 +160,68 @@ class _DayStripState extends State<DayStrip> {
         controller: _scrollController,
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: Row(
+        child: Stack(
           children: <Widget>[
-            for (var index = 0; index < widget.days.length; index++)
-              Padding(
-                key: _chipKeys[index],
-                padding: const EdgeInsets.symmetric(horizontal: 3),
-                child: DayChip(
-                  label: _shortWeekdays[index],
-                  date: widget.days[index].date.day,
-                  lessons: widget.days[index].slots.length,
-                  isToday: widget.days[index].isToday(widget.now),
-                  isActive: index == widget.activeIndex,
-                  onTap: () => widget.onSelect(index),
-                ),
+            // Таблетка активного дня рисуется ПОД чипами (непозиционные
+            // дети Stack рисуются в порядке списка) и едет между ними.
+            AnimatedSlide(
+              offset: _pillOffsetFor(widget.activeIndex),
+              duration: const Duration(milliseconds: 240),
+              curve: Curves.easeOutCubic,
+              child: _ActiveDayPill(
+                key: dayStripPillKey,
+                width: _chipWidth,
+                height: _pillHeight,
+                color: scheme.primary,
               ),
+            ),
+            Row(
+              children: <Widget>[
+                for (var index = 0; index < widget.days.length; index++)
+                  Padding(
+                    key: _chipKeys[index],
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: _chipGap / 2,
+                    ),
+                    child: DayChip(
+                      label: _shortWeekdays[index],
+                      date: widget.days[index].date.day,
+                      lessons: widget.days[index].slots.length,
+                      isToday: widget.days[index].isToday(widget.now),
+                      isActive: index == widget.activeIndex,
+                      onTap: () => widget.onSelect(index),
+                    ),
+                  ),
+              ],
+            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Скруглённая «таблетка», подкладываемая под активный чип дня.
+class _ActiveDayPill extends StatelessWidget {
+  const _ActiveDayPill({
+    super.key,
+    required this.width,
+    required this.height,
+    required this.color,
+  });
+
+  final double width;
+  final double height;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(14),
       ),
     );
   }
@@ -160,7 +250,7 @@ class DayChip extends StatelessWidget {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final background = isActive
-        ? scheme.primary
+        ? Colors.transparent
         : isToday
         ? scheme.primaryContainer
         : scheme.surfaceContainerHighest.withValues(alpha: 0.6);
@@ -178,14 +268,14 @@ class DayChip extends StatelessWidget {
         onTap: onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          width: 48,
+          width: _chipWidth,
           padding: const EdgeInsets.symmetric(vertical: 7),
           decoration: BoxDecoration(
             color: background,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
               color: isActive
-                  ? scheme.primary
+                  ? Colors.transparent
                   : scheme.outlineVariant.withValues(alpha: 0.7),
             ),
           ),

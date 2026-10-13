@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/utils/plural.dart';
+import '../../../core/widgets/press_scale.dart';
 import '../../../core/widgets/staggered_appear.dart';
 import '../data/group.dart';
 
@@ -89,57 +90,59 @@ class GroupTile extends StatelessWidget {
     final scheme = theme.colorScheme;
     final subtitle = group.subtitle;
 
-    return Card(
-      color: isSelected
-          ? scheme.primaryContainer.withValues(alpha: 0.35)
-          : scheme.surfaceContainerLow,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          color: isSelected
-              ? scheme.primary.withValues(alpha: 0.5)
-              : scheme.outlineVariant.withValues(alpha: 0.7),
+    return PressScale(
+      child: Card(
+        color: isSelected
+            ? scheme.primaryContainer.withValues(alpha: 0.35)
+            : scheme.surfaceContainerLow,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(
+            color: isSelected
+                ? scheme.primary.withValues(alpha: 0.5)
+                : scheme.outlineVariant.withValues(alpha: 0.7),
+          ),
         ),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            children: <Widget>[
-              GroupAvatar(group: group, isSelected: isSelected),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      group.name,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    if (subtitle.isNotEmpty) ...[
-                      const SizedBox(height: 3),
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              children: <Widget>[
+                GroupAvatar(group: group, isSelected: isSelected),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
                       Text(
-                        subtitle,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: scheme.onSurfaceVariant,
-                          height: 1.3,
+                        group.name,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
+                      if (subtitle.isNotEmpty) ...[
+                        const SizedBox(height: 3),
+                        Text(
+                          subtitle,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: scheme.onSurfaceVariant,
+                            height: 1.3,
+                          ),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              Icon(
-                isSelected ? Icons.check_circle : Icons.chevron_right_rounded,
-                color: isSelected ? scheme.primary : scheme.outline,
-              ),
-            ],
+                const SizedBox(width: 8),
+                Icon(
+                  isSelected ? Icons.check_circle : Icons.chevron_right_rounded,
+                  color: isSelected ? scheme.primary : scheme.outline,
+                ),
+              ],
+            ),
           ),
         ),
       ),

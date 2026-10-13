@@ -26,6 +26,14 @@ GoRouter _probeRouter() => GoRouter(
 );
 
 void main() {
+  test('на Android переходами экранов управляет fade-forwards', () {
+    final ThemeData theme = AppTheme.light(_defaultSeed);
+
+    final builder = theme.pageTransitionsTheme.builders[TargetPlatform.android];
+
+    expect(builder, isA<FadeForwardsPageTransitionsBuilder>());
+  });
+
   testWidgets(
     'смена темы применяется за один кадр, без покадрового перестроения дерева',
     (WidgetTester tester) async {
