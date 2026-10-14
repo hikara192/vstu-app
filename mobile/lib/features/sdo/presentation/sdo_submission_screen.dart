@@ -172,14 +172,14 @@ class _SdoSubmissionScreenState extends ConsumerState<SdoSubmissionScreen> {
                   child: OutlinedButton(
                     onPressed: _loading || !widget.assignment.requiresText && !widget.assignment.requiresFile
                         ? null
-                        : () => _save(ref, asDraft: true),
+                        : _saveDraft,
                     child: const Text('Сохранить черновик'),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: FilledButton.icon(
-                    onPressed: _loading ? null : () => _save(ref, asDraft: false),
+                    onPressed: _loading ? null : _submit,
                     icon: _loading
                         ? const SizedBox(
                             width: 16,
@@ -251,7 +251,14 @@ class _SdoSubmissionScreenState extends ConsumerState<SdoSubmissionScreen> {
     }
   }
 
-  Future<void> _save(WidgetRef ref, {required bool asDraft}) async {
+  Future<void> _saveDraft() => _persist(submit: false);
+
+  Future<void> _submit() => _persist(submit: true);
+
+  /// Сохраняет текст и/или файл. При [submit] дополнительно отправляет
+  /// работу на проверку — это отдельный шаг Moodle, без которого задание
+  /// остаётся черновиком.
+  Future<void> _persist({required bool submit}) async {
     if (_loading) return;
     setState(() {
       _loading = true;
@@ -259,23 +266,31 @@ class _SdoSubmissionScreenState extends ConsumerState<SdoSubmissionScreen> {
     });
 
     try {
-      await ref.read(sdoRepositoryProvider).saveSubmission(
-        assignmentId: widget.assignment.id,
-        onlineText: widget.assignment.requiresText ? _textController.text.trim() : null,
-        fileName: _pickedFile?.fileName,
-        fileBytes: _pickedFile?.fileBytes,
-      );
-      if (!asDraft) {
-        // Moodle обычно требует отдельного вызова для отправки на проверку,
-        // но mod_assign_save_submission с плагином files/onlinetext обычно
-        // создаёт черновик. Для полной отправки нужен mod_assign_submit.
-        // Упрощённо: если требуется текст/файл — считаем, что отправка =
-        // сохранение + флаг отправки. Для чистого варианта можно добавить
-        // отдельный вызов submit.
+      final String? onlineText = widget.assignment.requiresText
+          ? _textController.text.trim()
+          : null;
+      if (submit) {
+        await ref
+            .read(sdoRepositoryProvider)
+            .submitForGrading(
+              assignmentId: widget.assignment.id,
+              onlineText: onlineText,
+              fileName: _pickedFile?.fileName,
+              fileBytes: _pickedFile?.fileBytes,
+            );
+      } else {
+        await ref
+            .read(sdoRepositoryProvider)
+            .saveSubmission(
+              assignmentId: widget.assignment.id,
+              onlineText: onlineText,
+              fileName: _pickedFile?.fileName,
+              fileBytes: _pickedFile?.fileBytes,
+            );
       }
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(asDraft ? 'Черновик сохранён' : 'Отправлено на проверку')),
+          SnackBar(content: Text(submit ? 'Отправлено на проверку' : 'Черновик сохранён')),
         );
         ref.invalidate(sdoSubmissionProvider(widget.assignment.id));
       }

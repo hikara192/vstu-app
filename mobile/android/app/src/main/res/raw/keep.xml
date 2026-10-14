@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Иконка уведомлений ссылается из Dart по имени (@drawable/ic_stat_reminder),
+  поэтому в release-сборке упаковщик ресурсов не видит её и удаляет как
+  «недостижимую». Без неё flutter_local_notifications падает на initialize
+  (invalid_icon), сервис уведомлений не создаётся, и включение напоминаний
+  выдаёт ложную ошибку «разрешите уведомления в настройках Android».
+  Явно удерживаем ресурс.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_stat_reminder" />

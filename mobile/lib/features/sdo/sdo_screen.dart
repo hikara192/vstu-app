@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../core/config.dart';
+import 'sdo_host_policy.dart';
 import 'sdo_session_store.dart';
 
 /// Полноэкранный «мини-браузер» СДО ВГТУ: сайт открывается внутри приложения,
@@ -41,7 +42,7 @@ class _SdoScreenState extends State<SdoScreen> {
     super.initState();
     if (widget.bodyBuilder == null) {
       _cookieManager = WebViewCookieManager();
-      _sessionStore = SdoSessionStore();
+      _sessionStore = SecureSdoSessionStore();
       _controller = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..setNavigationDelegate(
@@ -50,6 +51,15 @@ class _SdoScreenState extends State<SdoScreen> {
             onPageFinished: (_) {
               _syncNavigationState();
               _snapshotSession();
+            },
+            onNavigationRequest: (NavigationRequest request) {
+              if (isAllowedSdoUrl(request.url)) {
+                return NavigationDecision.navigate;
+              }
+              // Сессия СДО уже активна в этом WebView: чужой адрес здесь — это
+              // доступ к ней. Открываем снаружи, внутри приложения не пускаем.
+              unawaited(_openExternally(request.url));
+              return NavigationDecision.prevent;
             },
             onWebResourceError: (error) {
               if (error.isForMainFrame == true) {
@@ -137,10 +147,10 @@ class _SdoScreenState extends State<SdoScreen> {
     _syncNavigationState();
   }
 
-  Future<void> _openExternally() async {
-    final String? current = await _controller?.currentUrl();
+  Future<void> _openExternally([String? url]) async {
+    final String target = url ?? await _controller?.currentUrl() ?? widget._startUrl;
     final bool launched = await launchUrl(
-      Uri.parse(current ?? widget._startUrl),
+      Uri.parse(target),
       mode: LaunchMode.externalApplication,
     );
     if (!launched && mounted) {

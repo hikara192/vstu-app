@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 /// Кука сессии СДО (имя + значение).
 ///
@@ -30,27 +30,32 @@ class SdoSessionCookie {
 
   @override
   int get hashCode => Object.hash(name, value);
-
-  @override
-  String toString() => 'SdoSessionCookie(name: $name, value: $value)';
 }
 
-/// Хранит куки сессии СДО между запусками приложения.
-///
-/// Moodle выдаёт куку `MoodleSession` без срока действия (session cookie):
-/// Android-WebView держит её только в памяти процесса и теряет при
-/// перезапуске приложения. Этот сторедж позволяет снять куки с WebView и
-/// вернуть их при следующем запуске.
-class SdoSessionStore {
-  SdoSessionStore([this._preferences]);
+/// Хранит куки веб-сессии СДО между запусками приложения.
+abstract interface class SdoSessionStore {
+  Future<List<SdoSessionCookie>> load();
+
+  Future<void> save(List<SdoSessionCookie> cookies);
+
+  Future<void> clear();
+}
+
+/// Хранит куки в [FlutterSecureStorage]: значение куки `MoodleSession` даёт
+/// доступ к веб-версии СДО, поэтому оно не должно лежать в обычных
+/// `SharedPreferences` (там его может прочитать любой с доступом к данным
+/// приложения). Так же защищён, как и ws-токен.
+class SecureSdoSessionStore implements SdoSessionStore {
+  SecureSdoSessionStore([FlutterSecureStorage? storage])
+    : _storage = storage ?? const FlutterSecureStorage();
 
   static const String storageKey = 'sdo_session_cookies';
 
-  final SharedPreferences? _preferences;
+  final FlutterSecureStorage _storage;
 
+  @override
   Future<List<SdoSessionCookie>> load() async {
-    final SharedPreferences preferences = _preferences ?? await SharedPreferences.getInstance();
-    final String? raw = preferences.getString(storageKey);
+    final String? raw = await _storage.read(key: storageKey);
     if (raw == null || raw.isEmpty) {
       return const <SdoSessionCookie>[];
     }
@@ -65,9 +70,35 @@ class SdoSessionStore {
     }
   }
 
+  @override
+  Future<void> save(List<SdoSessionCookie> cookies) {
+    final String raw = jsonEncode(
+      cookies.map((SdoSessionCookie cookie) => cookie.toJson()).toList(),
+    );
+    return _storage.write(key: storageKey, value: raw);
+  }
+
+  @override
+  Future<void> clear() => _storage.delete(key: storageKey);
+}
+
+/// Хранилище в памяти — для тестов и превью.
+class InMemorySdoSessionStore implements SdoSessionStore {
+  InMemorySdoSessionStore([List<SdoSessionCookie>? cookies])
+    : _cookies = <SdoSessionCookie>[...?cookies];
+
+  List<SdoSessionCookie> _cookies;
+
+  @override
+  Future<List<SdoSessionCookie>> load() async => List<SdoSessionCookie>.of(_cookies);
+
+  @override
   Future<void> save(List<SdoSessionCookie> cookies) async {
-    final SharedPreferences preferences = _preferences ?? await SharedPreferences.getInstance();
-    final String raw = jsonEncode(cookies.map((SdoSessionCookie cookie) => cookie.toJson()).toList());
-    await preferences.setString(storageKey, raw);
+    _cookies = List<SdoSessionCookie>.of(cookies);
+  }
+
+  @override
+  Future<void> clear() async {
+    _cookies = <SdoSessionCookie>[];
   }
 }

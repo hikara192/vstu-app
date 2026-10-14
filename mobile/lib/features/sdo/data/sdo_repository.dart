@@ -2,14 +2,19 @@ import 'sdo_data_source.dart';
 import 'sdo_exception.dart';
 import 'sdo_models.dart';
 import 'sdo_token_store.dart';
+import '../sdo_session_store.dart';
 
 /// Объединяет источник данных СДО и хранилище токена: сам достаёт токен,
 /// сам сбрасывает его при протухании и держит профиль пользователя.
 class SdoRepository {
-  SdoRepository(this._source, this._store);
+  SdoRepository(this._source, this._store, {this._sessionStore});
 
   final SdoDataSource _source;
   final SdoTokenStore _store;
+
+  /// Веб-сессия СДО (куки WebView). Сбрасывается вместе с токеном, иначе
+  /// «выход» оставит пользователя залогиненным в мини-браузере.
+  final SdoSessionStore? _sessionStore;
 
   /// Профиль из хранилища, если вход уже выполнялся.
   Future<SdoProfile?> restore() async {
@@ -34,7 +39,7 @@ class SdoRepository {
     });
   }
 
-  Future<void> logout() => _store.clear();
+  Future<void> logout() => _clearSession();
 
   Future<List<SdoCourse>> fetchCourses() {
     return _guard(() async {
@@ -138,6 +143,33 @@ class SdoRepository {
     });
   }
 
+  /// Сохраняет работу и отправляет её на проверку одним действием.
+  ///
+  /// Moodle принимает к проверке уже сохранённую работу, поэтому сначала
+  /// вызывается `mod_assign_save_submission`, затем
+  /// `mod_assign_submit_for_grading`. Разделять эти шаги на вызывающей
+  /// стороне нельзя — легко забыть второй и получить «тихий» черновик.
+  Future<void> submitForGrading({
+    required int assignmentId,
+    required String? onlineText,
+    required String? fileName,
+    required List<int>? fileBytes,
+  }) {
+    return _guard(() async {
+      final String token = await _requireToken();
+      final SdoProfile profile = await _profile(token);
+      await _source.saveSubmission(
+        token,
+        assignmentId: assignmentId,
+        userId: profile.userId,
+        onlineText: onlineText,
+        fileName: fileName,
+        fileBytes: fileBytes,
+      );
+      await _source.submitForGrading(token, assignmentId: assignmentId);
+    });
+  }
+
   Future<String?> autologinUrl() {
     return _guard(() async {
       final String token = await _requireToken();
@@ -166,8 +198,14 @@ class SdoRepository {
     try {
       return await action();
     } on SdoAuthException {
-      await _store.clear();
+      await _clearSession();
       rethrow;
     }
+  }
+
+  /// Полный выход: и ws-токен, и куки веб-сессии.
+  Future<void> _clearSession() async {
+    await _store.clear();
+    await _sessionStore?.clear();
   }
 }

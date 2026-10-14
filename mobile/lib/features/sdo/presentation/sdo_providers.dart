@@ -6,6 +6,7 @@ import '../data/sdo_file_opener.dart';
 import '../data/sdo_models.dart';
 import '../data/sdo_repository.dart';
 import '../data/sdo_token_store.dart';
+import '../sdo_session_store.dart';
 
 final sdoApiClientProvider = Provider<SdoApiClient>((ref) {
   final SdoApiClient client = SdoApiClient();
@@ -17,6 +18,10 @@ final sdoTokenStoreProvider = Provider<SdoTokenStore>(
   (ref) => SecureSdoTokenStore(),
 );
 
+final sdoSessionStoreProvider = Provider<SdoSessionStore>(
+  (ref) => SecureSdoSessionStore(),
+);
+
 final sdoDataSourceProvider = Provider<SdoDataSource>(
   (ref) => MoodleSdoDataSource(ref.watch(sdoApiClientProvider)),
 );
@@ -25,6 +30,7 @@ final sdoRepositoryProvider = Provider<SdoRepository>(
   (ref) => SdoRepository(
     ref.watch(sdoDataSourceProvider),
     ref.watch(sdoTokenStoreProvider),
+    sessionStore: ref.watch(sdoSessionStoreProvider),
   ),
 );
 

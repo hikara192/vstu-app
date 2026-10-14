@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../../../core/config.dart';
 import '../../../core/utils/parse.dart';
+import '../sdo_host_policy.dart';
 import 'sdo_exception.dart';
 
 /// Тонкий клиент Moodle Web Services.
@@ -104,7 +105,16 @@ class SdoApiClient {
 
   /// Скачивает файл курса. Moodle отдаёт вложения через `pluginfile.php`,
   /// доступ к которым открывается ws-токеном в параметре `token`.
+  ///
+  /// Адрес приходит из ответа сервера, поэтому перед отправкой токена
+  /// проверяем, что он ведёт на домен ВГТУ: иначе секрет ушёл бы посторонним.
   Future<List<int>> downloadFile(String url, {required String token}) async {
+    if (!isAllowedSdoUrl(url)) {
+      throw const SdoException(
+        'СДО вернула ссылку на файл вне домена ВГТУ.',
+        code: 'sdo_untrusted_file_url',
+      );
+    }
     final Response<List<int>> response = await _sendBytes(
       () => _dio.get<List<int>>(
         url,

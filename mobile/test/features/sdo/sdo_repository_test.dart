@@ -4,6 +4,7 @@ import 'package:vstu_app/features/sdo/data/sdo_data_source.dart';
 import 'package:vstu_app/features/sdo/data/sdo_models.dart';
 import 'package:vstu_app/features/sdo/data/sdo_repository.dart';
 import 'package:vstu_app/features/sdo/data/sdo_token_store.dart';
+import 'package:vstu_app/features/sdo/sdo_session_store.dart';
 
 const SdoProfile _profile = SdoProfile(
   userId: 42,
@@ -23,6 +24,7 @@ class _FakeDataSource implements SdoDataSource {
   int? lastDownloadFileCallCount;
   int? lastSaveSubmissionAssignmentId;
   int? lastSaveSubmissionUserId;
+  int? lastSubmitForGradingAssignmentId;
   int? lastAutologinUserId;
 
   Object? loginError;
@@ -176,6 +178,14 @@ class _FakeDataSource implements SdoDataSource {
   }) async {
     lastSaveSubmissionAssignmentId = assignmentId;
     lastSaveSubmissionUserId = userId;
+  }
+
+  @override
+  Future<void> submitForGrading(
+    String token, {
+    required int assignmentId,
+  }) async {
+    lastSubmitForGradingAssignmentId = assignmentId;
   }
 
   @override
@@ -354,6 +364,25 @@ void main() {
     expect(source.lastSaveSubmissionUserId, 42);
   });
 
+  test('submitForGrading сохраняет работу и отправляет её на проверку', () async {
+    final _FakeDataSource source = _FakeDataSource();
+    final SdoRepository repository = SdoRepository(
+      source,
+      InMemorySdoTokenStore('token-123', _profile),
+    );
+
+    await repository.submitForGrading(
+      assignmentId: 100,
+      onlineText: 'Ответ',
+      fileName: null,
+      fileBytes: null,
+    );
+
+    expect(source.lastSaveSubmissionAssignmentId, 100);
+    expect(source.lastSaveSubmissionUserId, 42);
+    expect(source.lastSubmitForGradingAssignmentId, 100);
+  });
+
   test('autologinUrl передаёт userId', () async {
     final _FakeDataSource source = _FakeDataSource();
     final SdoRepository repository = SdoRepository(
@@ -407,5 +436,52 @@ void main() {
 
     expect(await store.readToken(), isNull);
     expect(await store.readProfile(), isNull);
+  });
+
+  test('logout очищает токен и веб-сессию', () async {
+    final InMemorySdoTokenStore store = InMemorySdoTokenStore(
+      'token-123',
+      _profile,
+    );
+    final InMemorySdoSessionStore sessionStore = InMemorySdoSessionStore(
+      const <SdoSessionCookie>[
+        SdoSessionCookie(name: 'MoodleSession', value: 'abcdef123456'),
+      ],
+    );
+    final SdoRepository repository = SdoRepository(
+      _FakeDataSource(),
+      store,
+      sessionStore: sessionStore,
+    );
+
+    await repository.logout();
+
+    expect(await store.readToken(), isNull);
+    expect(await sessionStore.load(), isEmpty);
+  });
+
+  test('ошибка авторизации очищает токен и веб-сессию', () async {
+    final InMemorySdoTokenStore store = InMemorySdoTokenStore(
+      'token-123',
+      _profile,
+    );
+    final InMemorySdoSessionStore sessionStore = InMemorySdoSessionStore(
+      const <SdoSessionCookie>[
+        SdoSessionCookie(name: 'MoodleSession', value: 'abcdef123456'),
+      ],
+    );
+    final SdoRepository repository = SdoRepository(
+      _AuthFailDataSource(),
+      store,
+      sessionStore: sessionStore,
+    );
+
+    await expectLater(
+      repository.fetchCourses(),
+      throwsA(isA<SdoAuthException>()),
+    );
+
+    expect(await store.readToken(), isNull);
+    expect(await sessionStore.load(), isEmpty);
   });
 }

@@ -30,15 +30,22 @@ SdoException sdoErrorFromMoodle(String? errorCode, String? fallbackMessage) {
       'Неверный логин или пароль СДО.',
       code: 'sdo_invalidlogin',
     ),
-    'invalidtoken' ||
-    'accessexception' ||
-    'nopermissions' ||
-    'servicerequireslogin' => const SdoAuthException(),
+    // Только реально недействительный токен означает «нужно войти заново».
+    'invalidtoken' || 'servicerequireslogin' || 'usernotloggedin' =>
+      const SdoAuthException(),
+    // Ошибка прав — это НЕ протухший токен: у студента просто нет доступа к
+    // конкретной функции. Раньше такие ответы стирали токен и выкидывали
+    // пользователя из аккаунта.
+    'nopermissions' || 'accessexception' => SdoException(
+      fallbackMessage == null || fallbackMessage.isEmpty
+          ? 'Недостаточно прав для этого действия в СДО.'
+          : fallbackMessage,
+      code: 'sdo_nopermissions',
+    ),
     'webservicesnotenabled' || 'enablewsdescription' => const SdoException(
       'В СДО ВГТУ отключены веб-сервисы. Обратитесь в поддержку СДО.',
       code: 'sdo_ws_disabled',
     ),
-    'usernotloggedin' => const SdoAuthException(),
     _ => SdoException(
       fallbackMessage == null || fallbackMessage.isEmpty
           ? 'СДО ВГТУ вернула ошибку.'

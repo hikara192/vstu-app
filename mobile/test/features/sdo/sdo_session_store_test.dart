@@ -1,41 +1,57 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vstu_app/features/sdo/sdo_session_store.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
-    SharedPreferences.setMockInitialValues(<String, Object>{});
+    FlutterSecureStorage.setMockInitialValues(<String, String>{});
   });
 
-  test('SdoSessionStore сохраняет и читает куки (round-trip)', () async {
-    final SdoSessionStore store = SdoSessionStore();
+  test('SecureSdoSessionStore сохраняет и читает куки (round-trip)', () async {
+    final SdoSessionStore store = SecureSdoSessionStore();
 
     await store.save(const <SdoSessionCookie>[
       SdoSessionCookie(name: 'MoodleSession', value: 'abcdef123456'),
       SdoSessionCookie(name: 'sl-session', value: 'xyz=='),
     ]);
 
-    final List<SdoSessionCookie> loaded = await store.load();
-    expect(loaded, const <SdoSessionCookie>[
+    expect(await store.load(), const <SdoSessionCookie>[
       SdoSessionCookie(name: 'MoodleSession', value: 'abcdef123456'),
       SdoSessionCookie(name: 'sl-session', value: 'xyz=='),
     ]);
   });
 
-  test('SdoSessionStore возвращает пустой список без сохранённых данных', () async {
-    final SdoSessionStore store = SdoSessionStore();
+  test('SecureSdoSessionStore возвращает пустой список без данных', () async {
+    expect(await SecureSdoSessionStore().load(), isEmpty);
+  });
+
+  test('SecureSdoSessionStore не падает на повреждённых данных', () async {
+    FlutterSecureStorage.setMockInitialValues(<String, String>{
+      SecureSdoSessionStore.storageKey: 'not-json-at-all',
+    });
+
+    expect(await SecureSdoSessionStore().load(), isEmpty);
+  });
+
+  test('SecureSdoSessionStore.clear удаляет сохранённую сессию', () async {
+    final SdoSessionStore store = SecureSdoSessionStore();
+    await store.save(const <SdoSessionCookie>[
+      SdoSessionCookie(name: 'MoodleSession', value: 'abcdef123456'),
+    ]);
+
+    await store.clear();
 
     expect(await store.load(), isEmpty);
   });
 
-  test('SdoSessionStore не падает на повреждённых данных', () async {
-    SharedPreferences.setMockInitialValues(<String, Object>{
-      'sdo_session_cookies': 'not-json-at-all',
-    });
-    final SdoSessionStore store = SdoSessionStore();
+  test('SdoSessionCookie.toString не раскрывает значение куки', () {
+    const SdoSessionCookie cookie = SdoSessionCookie(
+      name: 'MoodleSession',
+      value: 'super-secret',
+    );
 
-    expect(await store.load(), isEmpty);
+    expect(cookie.toString(), isNot(contains('super-secret')));
   });
 }

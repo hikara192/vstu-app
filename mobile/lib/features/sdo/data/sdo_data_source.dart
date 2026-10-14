@@ -64,6 +64,11 @@ abstract interface class SdoDataSource {
     List<int>? fileBytes,
   });
 
+  /// Отправляет ранее сохранённую работу на проверку
+  /// (`mod_assign_submit_for_grading`). Без этого вызова задание остаётся
+  /// черновиком и преподаватель его не видит.
+  Future<void> submitForGrading(String token, {required int assignmentId});
+
   /// Возвращает ссылку автологина в веб-сессию Moodle, чтобы открывать
   /// интерактивные элементы (тесты, форумы) без повторного ввода пароля.
   Future<String?> autologinUrl(String token, {required int userId});
@@ -318,6 +323,23 @@ class MoodleSdoDataSource implements SdoDataSource {
       'mod_assign_save_submission',
       token: token,
       params: params,
+    );
+  }
+
+  @override
+  Future<void> submitForGrading(
+    String token, {
+    required int assignmentId,
+  }) async {
+    await _client.call(
+      'mod_assign_submit_for_grading',
+      token: token,
+      params: <String, Object?>{
+        'assignmentid': assignmentId,
+        // Обязательное подтверждение от имени студента требуется настройкой
+        // задания; без него Moodle отклоняет отправку.
+        'acceptsubmissionstatement': 1,
+      },
     );
   }
 
