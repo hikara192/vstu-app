@@ -1,0 +1,4 @@
+<resources>
+    <!-- Плоский белый фон (запасной вариант, если не нужен градиент) -->
+    <color name="ic_launcher_background">#FFFFFF</color>
+</resources>
