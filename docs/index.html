@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Политика конфиденциальности — VSTU HOME</title>
+  <meta name="description" content="Политика конфиденциальности мобильного приложения VSTU HOME: какие данные обрабатываются, где хранятся и как их удалить." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231B5E9C'/><text x='50' y='68' font-size='54' font-family='Arial' font-weight='bold' text-anchor='middle' fill='white'>V</text></svg>" />
+  <style>
+    :root {
+      --accent: #1b5e9c;
+      --accent-soft: #e8f1fa;
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1a1c1e;
+      --muted: #5b6472;
+      --border: #e2e7ee;
+      --radius: 16px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --accent: #7fb3e0;
+        --accent-soft: #1b2a38;
+        --bg: #101418;
+        --card: #171c21;
+        --text: #e7eaee;
+        --muted: #9aa5b1;
+        --border: #262d35;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0 16px 64px;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    .wrap { max-width: 820px; margin: 0 auto; }
+
+    header.hero {
+      margin: 0 -16px 28px;
+      padding: 40px 16px 36px;
+      background: linear-gradient(135deg, #1b5e9c 0%, #14456f 100%);
+      color: #fff;
+      text-align: center;
+    }
+
+    header.hero .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      margin-bottom: 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .16);
+      font-size: 13px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    header.hero h1 { margin: 0 0 8px; font-size: 28px; line-height: 1.25; }
+    header.hero p { margin: 0; opacity: .85; font-size: 15px; }
+
+    nav.toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      margin-bottom: 24px;
+    }
+
+    nav.toc h2 { margin: 0 0 10px; font-size: 15px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+    nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+    nav.toc li { margin: 3px 0; break-inside: avoid; }
+
+    @media (max-width: 560px) { nav.toc ol { columns: 1; } }
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      margin-bottom: 18px;
+    }
+
+    section > h2 {
+      margin: 0 0 12px;
+      font-size: 20px;
+      line-height: 1.3;
+      color: var(--accent);
+    }
+
+    section h3 { margin: 22px 0 8px; font-size: 16px; }
+
+    a { color: var(--accent); }
+    a:hover { text-decoration: none; }
+
+    code {
+      background: var(--accent-soft);
+      border-radius: 6px;
+      padding: 1px 6px;
+      font-size: 14px;
+      word-break: break-word;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 4px;
+      font-size: 15px;
+      display: block;
+      overflow-x: auto;
+    }
+
+    th, td { border-bottom: 1px solid var(--border); padding: 10px 12px; text-align: left; vertical-align: top; }
+    th { background: var(--accent-soft); font-weight: 600; white-space: nowrap; }
+    tr:last-child td { border-bottom: none; }
+
+    ul, ol { padding-left: 22px; }
+    li { margin: 5px 0; }
+
+    .note {
+      border-left: 4px solid var(--accent);
+      background: var(--accent-soft);
+      border-radius: 0 10px 10px 0;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+
+    .summary {
+      background: linear-gradient(135deg, #1b5e9c 0%, #14456f 100%);
+      color: #fff;
+      border: none;
+    }
+    .summary h2 { color: #fff; }
+    .summary strong { color: #fff; }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      padding-top: 8px;
+    }
+    footer a { color: var(--muted); }
+
+    .top { display: block; text-align: right; font-size: 13px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="badge">VSTU HOME</div>
+      <h1>Политика конфиденциальности</h1>
+      <p>Дата вступления в силу: 16 октября 2026 г.</p>
+    </header>
+
+    <p>
+      Настоящая Политика описывает, какие данные обрабатывает мобильное приложение
+      <strong>«VSTU HOME»</strong> (далее — «Приложение»), как и зачем эти данные
+      используются, где хранятся и как пользователь может ими управлять.
+    </p>
+    <p>
+      Приложение является справочно-учебным сервисом для студентов и сотрудников
+      Витебского государственного технического университета (ВГТУ) и не предназначено
+      для коммерческой рекламы или продажи данных. Используя Приложение, вы
+      подтверждаете, что ознакомились с настоящей Политикой.
+    </p>
+
+    <nav class="toc">
+      <h2>Содержание</h2>
+      <ol>
+        <li><a href="#operator">Оператор данных</a></li>
+        <li><a href="#data">Какие данные обрабатываются</a></li>
+        <li><a href="#servers">С какими серверами работает Приложение</a></li>
+        <li><a href="#purposes">Для чего используются данные</a></li>
+        <li><a href="#third-parties">Передача данных третьим лицам</a></li>
+        <li><a href="#security">Безопасность</a></li>
+        <li><a href="#retention">Хранение и удаление данных</a></li>
+        <li><a href="#minors">Данные несовершеннолетних</a></li>
+        <li><a href="#rights">Права пользователя</a></li>
+        <li><a href="#changes">Изменения в Политике</a></li>
+      </ol>
+    </nav>
+
+    <section id="operator">
+      <h2>1. Оператор данных</h2>
+      <p>
+        Оператором обработки персональных данных является команда разработчиков
+        Приложения «VSTU HOME».
+      </p>
+      <p><strong>Контакты для вопросов о конфиденциальности:</strong></p>
+      <ul>
+        <li>Репозиторий проекта: <a href="https://github.com/hikara192/vstu-app">github.com/hikara192/vstu-app</a></li>
+        <li>E-mail: <code>[укажите e-mail для связи]</code></li>
+      </ul>
+    </section>
+
+    <section id="data">
+      <h2>2. Какие данные обрабатываются</h2>
+
+      <h3>2.1. Данные, которые вы передаёте добровольно</h3>
+      <table>
+        <thead>
+          <tr><th>Данные</th><th>Зачем</th><th>Где хранятся</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Логин и пароль от СДО ВГТУ</td>
+            <td>Для входа в систему дистанционного обучения (передача на сервер <code>sdo.vstu.by</code> для получения токена)</td>
+            <td><strong>Не сохраняются</strong> в Приложении — используются только при входе и не хранятся после получения токена</td>
+          </tr>
+          <tr>
+            <td>Файлы, которые вы выбираете для сдачи заданий</td>
+            <td>Загрузка работ в СДО (Moodle)</td>
+            <td>Передаются напрямую на сервер СДО ВГТУ</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>2.2. Данные, которые Приложение создаёт и хранит на вашем устройстве</h3>
+      <table>
+        <thead>
+          <tr><th>Данные</th><th>Зачем</th><th>Где хранятся</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Выбранная группа (идентификатор и название)</td>
+            <td>Чтобы открывать расписание нужной группы</td>
+            <td>Локальное хранилище приложения (<code>SharedPreferences</code>)</td>
+          </tr>
+          <tr>
+            <td>Кэш расписания и списка групп</td>
+            <td>Работа Приложения без интернета и меньше запросов к серверу</td>
+            <td>Локальное хранилище приложения</td>
+          </tr>
+          <tr>
+            <td>Настройки оформления: тема, цвет акцента, стартовый экран, включены ли уведомления</td>
+            <td>Сохранение ваших настроек</td>
+            <td>Локальное хранилище приложения</td>
+          </tr>
+          <tr>
+            <td>Токен веб-сервиса СДО (Moodle <code>wstoken</code>) и профиль пользователя (ID, имя, аватар)</td>
+            <td>Чтобы не вводить пароль при каждом открытии СДО</td>
+            <td><strong>Зашифрованное</strong> хранилище (<code>flutter_secure_storage</code>: на Android — AES-Keystore)</td>
+          </tr>
+          <tr>
+            <td>Куки веб-сессии СДО (<code>MoodleSession</code>)</td>
+            <td>Чтобы открывать страницы СДО без повторного входа</td>
+            <td><strong>Зашифрованное</strong> хранилище (<code>flutter_secure_storage</code>)</td>
+          </tr>
+          <tr>
+            <td>Скачанные файлы курсов и вложения</td>
+            <td>Просмотр материалов офлайн</td>
+            <td>Локальный кэш приложения</td>
+          </tr>
+          <tr>
+            <td>Локальные уведомления о парах (напоминания)</td>
+            <td>Напоминание о начале занятий</td>
+            <td>Локально на устройстве; данные не отправляются в сеть</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>2.3. Данные, которые Приложение НЕ собирает</h3>
+      <p>Приложение <strong>не</strong> собирает и не передаёт:</p>
+      <ul>
+        <li>данные для аналитики и статистики использования;</li>
+        <li>идентификаторы рекламы и данные для поведенческой рекламы;</li>
+        <li>геолокацию, контакты, доступ к камере, микрофону, SMS и т. п.;</li>
+        <li>номер телефона и данные банковских карт (в Приложении нет платежей);</li>
+        <li>данные о социальных сетях;</li>
+        <li>какие-либо данные третьим компаниям для их собственных целей.</li>
+      </ul>
+      <div class="note">
+        В Приложении нет рекламных SDK, SDK аналитики (Firebase Analytics, Amplitude
+        и аналогов) и трекеров.
+      </div>
+    </section>
+
+    <section id="servers">
+      <h2>3. С какими серверами работает Приложение</h2>
+      <p>Приложение отправляет сетевые запросы только к двум сервисам:</p>
+      <ol>
+        <li>
+          <strong>Сервис расписания</strong> — <code>https://schedule.vstu.by/api/v1</code>
+          <br />Запрос списка групп и расписания (по идентификатору группы).
+          Передаётся только идентификатор группы, никаких персональных данных.
+        </li>
+        <li>
+          <strong>Система дистанционного обучения (СДО) ВГТУ</strong> — <code>https://sdo.vstu.by</code>
+          <br />Обмен логина/пароля на токен, вызовы веб-сервисов Moodle (курсы, задания,
+          оценки, календарь). Скачивание и загрузка файлов материалов и работ.
+        </li>
+      </ol>
+      <p>
+        Приложение проверяет, что ссылки на файлы и адреса запросов ведут на домены
+        ВГТУ (<code>vstu.by</code>), и не передаёт секреты (токен, куки) на сторонние ресурсы.
+      </p>
+    </section>
+
+    <section id="purposes">
+      <h2>4. Для чего используются данные</h2>
+      <ul>
+        <li>предоставление функций Приложения: расписание, список групп, материалы СДО, сдача заданий;</li>
+        <li>сохранение ваших настроек и состояния входа в СДО между запусками;</li>
+        <li>отправка локальных напоминаний о занятиях;</li>
+        <li>обеспечение безопасности: защита токенов и сессий от чтения другими приложениями.</li>
+      </ul>
+      <p>
+        <strong>Правовые основания:</strong> выполнение договора (предоставление сервиса
+        расписания и доступа к СДО) и законный интерес в поддержании работоспособности
+        и безопасности Приложения.
+      </p>
+    </section>
+
+    <section id="third-parties">
+      <h2>5. Передача данных третьим лицам</h2>
+      <p>
+        Приложение <strong>не продаёт, не сдаёт в аренду и не передаёт</strong> персональные
+        данные третьим лицам, за исключением случаев:
+      </p>
+      <ul>
+        <li>данные передаются напрямую серверам ВГТУ (<code>schedule.vstu.by</code>, <code>sdo.vstu.by</code>) — это необходимо для работы Приложения;</li>
+        <li>раскрытие данных требуется по требованию закона, компетентных органов в установленном порядке.</li>
+      </ul>
+      <p>
+        Приложение не содержит встроенной рекламы и не работает с внешними рекламными
+        или аналитическими сетями.
+      </p>
+    </section>
+
+    <section id="security">
+      <h2>6. Безопасность</h2>
+      <ul>
+        <li>токен СДО, профиль и куки сессии хранятся в зашифрованном хранилище (<code>flutter_secure_storage</code>, шифрование AES через Android Keystore);</li>
+        <li>пароль от СДО не сохраняется на устройстве;</li>
+        <li>запросы к СДО идут только по HTTPS;</li>
+        <li>ссылки на файлы проверяются на принадлежность доменам ВГТУ;</li>
+        <li>Приложение работает офлайн: часть данных доступна из локального кэша без выхода в сеть.</li>
+      </ul>
+      <div class="note">
+        Безопасность приложений общедоступных магазинов не обеспечивается на 100 %.
+        Не передавайте свой пароль от СДО третьим лицам и не используйте Приложение
+        на чужих устройствах без выхода из аккаунта.
+      </div>
+    </section>
+
+    <section id="retention">
+      <h2>7. Хранение и удаление данных</h2>
+      <ul>
+        <li>Данные хранятся на вашем устройстве до тех пор, пока вы не очистите их.</li>
+        <li>
+          Удалить данные можно так:
+          <ul>
+            <li><strong>выход из СДО</strong> в настройках Приложения — удаляются токен, профиль и куки сессии;</li>
+            <li><strong>«Очистить данные»</strong> в настройках Android (Приложение → Хранилище) — удаляются все локальные данные, включая кэш расписания и настройки.</li>
+          </ul>
+        </li>
+        <li>При удалении Приложения все локальные данные удаляются вместе с ним.</li>
+        <li>
+          Данные на серверах СДО и сервиса расписания хранятся в соответствии с правилами
+          ВГТУ; для их удаления обращайтесь в службу поддержки университета.
+        </li>
+      </ul>
+    </section>
+
+    <section id="minors">
+      <h2>8. Данные несовершеннолетних</h2>
+      <p>
+        Приложение предназначено для студентов и сотрудников университета. Сознательно
+        обрабатывать данные лиц младше 18 лет Приложение не стремится. Если вы считаете,
+        что ребёнок передал Приложению персональные данные без согласия законного
+        представителя, напишите нам — данные будут удалены.
+      </p>
+    </section>
+
+    <section id="rights">
+      <h2>9. Права пользователя</h2>
+      <ul>
+        <li>запросить, какие данные о вас обрабатываются Приложением;</li>
+        <li>потребовать удаления данных с устройства (см. раздел 7);</li>
+        <li>отозвать согласие на вход в СДО, выйдя из аккаунта в Приложении;</li>
+        <li>задать вопрос или направить обращение по контактам из раздела 1.</li>
+      </ul>
+    </section>
+
+    <section id="changes">
+      <h2>10. Изменения в Политике</h2>
+      <p>
+        Политика может обновляться при изменении функций Приложения. Новая редакция
+        публикуется на этой странице и вступает в силу с даты публикации. Продолжение
+        использования Приложения после изменений означает согласие с обновлённой
+        Политикой.
+      </p>
+    </section>
+
+    <section class="summary">
+      <h2>Кратко</h2>
+      <p>
+        Приложение не собирает аналитику и не показывает рекламу. Оно хранит на вашем
+        устройстве только выбранную группу, настройки, кэш расписания и (в зашифрованном
+        виде) данные входа в СДО ВГТУ. Ваши данные не продаются и не передаются
+        третьим лицам.
+      </p>
+    </section>
+
+    <footer>
+      <p>
+        VSTU HOME ·
+        <a href="https://github.com/hikara192/vstu-app">исходный код на GitHub</a>
+      </p>
+      <a class="top" href="#">Наверх ↑</a>
+    </footer>
+  </div>
+</body>
+</html>
